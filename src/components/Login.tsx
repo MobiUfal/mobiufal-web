@@ -7,7 +7,7 @@ import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import CardHeader from '@material-ui/core/CardHeader';
 import Button from '@material-ui/core/Button';
-import { CardMedia } from '@material-ui/core';
+import { CardMedia} from '@material-ui/core';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -19,15 +19,24 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     loginBtn: {
       marginTop: theme.spacing(2),
+      backgroundColor: '#F93633',
+      textTransform: 'none',
       flexGrow: 1
     },
     header: {
       textAlign: 'center',
-      background: '#212121',
+      background: '#29AAD7',
       color: '#fff'
     },
     card: {
-      marginTop: theme.spacing(10)
+      marginTop: theme.spacing(10),
+      marginBottom: theme.spacing(7.6)
+    },
+    image: {
+      height: '25vh',
+      width: 'calc(20vw * 0.40)',
+      marginLeft: '140px',
+      backgroundColor: '#29AAD7'
     }
   })
 );
@@ -150,9 +159,8 @@ const Login = () => {
   return (
     <form className={classes.container} noValidate autoComplete="off">
       <Card className={classes.card}>
-        <CardHeader className={classes.header} title="MobiUfal Admin"/>
-        <CardMedia component="img" image="https://picsum.photos/400/300" alt="CardMedia Image" 
-        height="140" title="CardMedia Image Example" />
+        <CardHeader className={classes.header} title="MobiUfal" titleTypographyProps={{variant: 'h3'}}/>
+        <CardMedia className={classes.image} component="img" image={require('./material/logo-mobi.png')} title="CardMedia Image"/>
         <CardContent>
           <div>
             <TextField

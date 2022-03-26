@@ -7,7 +7,9 @@ import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import CardHeader from '@material-ui/core/CardHeader';
 import Button from '@material-ui/core/Button';
-import { CardMedia} from '@material-ui/core';
+import { CardMedia } from '@material-ui/core';
+import Grid from '@material-ui/core/Grid';
+
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -15,7 +17,7 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       flexWrap: 'wrap',
       width: 400,
-      margin: `${theme.spacing(0)} auto`
+      margin: 'auto'
     },
     loginBtn: {
       marginTop: theme.spacing(2),
@@ -30,12 +32,15 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     card: {
       marginTop: theme.spacing(10),
-      marginBottom: theme.spacing(7.6)
+      marginBottom: theme.spacing(36.2)
     },
     image: {
-      height: '25vh',
-      width: 'calc(20vw * 0.40)',
-      marginLeft: '140px',
+      width: 'calc(20vw * 0.45)',
+      backgroundColor: '#29AAD7',
+    },
+    grid: {
+      spacing: 0,
+      alignItems: 'center',
       backgroundColor: '#29AAD7'
     }
   })
@@ -159,8 +164,10 @@ const Login = () => {
   return (
     <form className={classes.container} noValidate autoComplete="off">
       <Card className={classes.card}>
-        <CardHeader className={classes.header} title="MobiUfal" titleTypographyProps={{variant: 'h3'}}/>
-        <CardMedia className={classes.image} component="img" image={require('./material/logo-mobi.png')} title="CardMedia Image"/>
+        <Grid className={classes.grid} container direction="column">
+          <CardHeader className={classes.header} title="MobiUfal" titleTypographyProps={{variant: 'h3'}}/>
+          <CardMedia className={classes.image} component="img" image={require('./material/logo-mobi.png')} title="CardMedia Image"/>    
+        </Grid>
         <CardContent>
           <div>
             <TextField
@@ -192,7 +199,7 @@ const Login = () => {
           <Button
             variant="contained"
             size="large"
-            color="secondary"
+            color="primary"
             className={classes.loginBtn}
             onClick={handleLogin}
             disabled={state.isButtonDisabled}>

@@ -9,30 +9,31 @@ import CardHeader from '@material-ui/core/CardHeader';
 import Button from '@material-ui/core/Button';
 import { CardMedia } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
+import Link from '@material-ui/core/Link';
 
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     container: {
       display: 'flex',
+      alignContent: 'center',
       flexWrap: 'wrap',
       width: 400,
+      height: 970,
       margin: 'auto'
-    },
-    loginBtn: {
-      marginTop: theme.spacing(2),
-      backgroundColor: '#F93633',
-      textTransform: 'none',
-      flexGrow: 1
     },
     header: {
       textAlign: 'center',
       background: '#29AAD7',
       color: '#fff'
     },
+    title: {
+      fontFamily: 'Arial',
+      fontWeight: 'bold'
+    },
     card: {
       marginTop: theme.spacing(10),
-      marginBottom: theme.spacing(36.2)
+      marginBottom: theme.spacing(10)
     },
     image: {
       width: 'calc(20vw * 0.45)',
@@ -42,6 +43,12 @@ const useStyles = makeStyles((theme: Theme) =>
       spacing: 0,
       alignItems: 'center',
       backgroundColor: '#29AAD7'
+    },
+    loginBtn: {
+      marginTop: theme.spacing(2),
+      backgroundColor: '#F93633',
+      textTransform: 'none',
+      flexGrow: 1
     }
   })
 );
@@ -165,7 +172,7 @@ const Login = () => {
     <form className={classes.container} noValidate autoComplete="off">
       <Card className={classes.card}>
         <Grid className={classes.grid} container direction="column">
-          <CardHeader className={classes.header} title="MobiUfal" titleTypographyProps={{variant: 'h3'}}/>
+          <CardHeader className={classes.header} classes={{title: classes.title}} title="MobiUfal" titleTypographyProps={{variant: 'h3'}}/>
           <CardMedia className={classes.image} component="img" image={require('./material/logo-mobi.png')} title="CardMedia Image"/>    
         </Grid>
         <CardContent>
@@ -193,8 +200,9 @@ const Login = () => {
               onChange={handleSenhaChange}
               onKeyPress={handleKeyPress}
             />
-          </div>
+            </div>
         </CardContent>
+        <Link href="#" variant="body2"> {'Esqueceu a senha?'} </Link>
         <CardActions>
           <Button
             variant="contained"

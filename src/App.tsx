@@ -1,9 +1,10 @@
-import { Home } from './pages/Home'
+import { AuthProvider } from './hooks/useAuth'
+import { Routes } from './Routes'
 
 export function App() {
   return (
-    <>
-      <Home />
-    </>
+    <AuthProvider>
+      <Routes />
+    </AuthProvider>
   )
 }

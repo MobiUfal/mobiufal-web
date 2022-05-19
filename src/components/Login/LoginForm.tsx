@@ -1,14 +1,32 @@
 import React, { useState } from "react"
+import axios, { AxiosError } from 'axios'
+
+import { useAuthContext } from "../../hooks/useAuth"
+import { api } from "../../services/api"
 
 export function LoginForm() {
+    const { login } = useAuthContext()
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-
     
     async function handleLogin(event: React.FormEvent) {
         event.preventDefault()
-        
-        // check username and password using await
+
+        try {
+          const response = await api.post('/auth/login', {
+            email,
+            password,
+          })
+
+          const JWT = response.data.data
+          login(JWT)
+        } catch (err: any | AxiosError) {
+          if (axios.isAxiosError(err)) {
+            console.log(err.message)
+          } else {
+            console.log(err)
+          }
+        }
     }
 
     return (
@@ -16,12 +34,14 @@ export function LoginForm() {
                 <input 
                   type="email"
                   placeholder="Email"
+                  onChange={(e) => setEmail(e.target.value)}
                   className="w-[421px] mb-8 px-4 py-[22px] text-[#49454F] text-2xl leading-6 placeholder:text-[#49454F] border border-black border-opacity-60 rounded"
                 />
 
                 <input 
                   type="password"
                   placeholder="Senha"
+                  onChange={(e) => setPassword(e.target.value)}
                   className="w-[421px] mb-5 px-4 py-[22px] text-[#49454F] text-2xl leading-6 placeholder:text-[#49454F] border border-black border-opacity-60 rounded"
                 />
 

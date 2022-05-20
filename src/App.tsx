@@ -1,13 +1,10 @@
-import React from 'react';
-import Login from './components/Login'
-import './App.css';
+import { AuthProvider } from './hooks/useAuth'
+import { Routes } from './Routes'
 
-function App() {
+export function App() {
   return (
-    <div className="App">
-      <Login />
-    </div>
-  );
+    <AuthProvider>
+      <Routes />
+    </AuthProvider>
+  )
 }
-
-export default App;

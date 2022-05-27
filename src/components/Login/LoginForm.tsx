@@ -1,19 +1,24 @@
 import React, { useState } from "react"
+import { useNavigate } from "react-router-dom"
 import axios, { AxiosError } from 'axios'
-import * as Yup from 'yup';
-import 'react-toastify/dist/ReactToastify.css';
-import { toast } from 'react-toastify';
-import getValidationErrors from '../../utils/getValidationErrors'
+import * as Yup from 'yup'
+import { toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
+import getValidationErrors from '../../utils/getValidationErrors'
 import { useAuthContext } from "../../hooks/useAuth"
 import { api } from "../../services/api"
 
 export default function LoginForm() {
     const { login } = useAuthContext()
+
     const [email, setEmail] = useState('')
     const [emailValidation, setEmailValidation] = useState('')
+    
     const [password, setPassword] = useState('')
     const [passwordValidation, setPasswordValidation] = useState('')
+
+    const navigate = useNavigate()
     
     async function handleLogin(event: React.FormEvent) {
         event.preventDefault()
@@ -50,6 +55,8 @@ export default function LoginForm() {
             position: toast.POSITION.TOP_RIGHT,
             autoClose: 2500
           });
+
+          navigate('/deslocamentos')
         } catch (err: any | AxiosError | Yup.ValidationError) {
           if (axios.isAxiosError(err)) {
             console.log(err.message)

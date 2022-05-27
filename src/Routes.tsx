@@ -6,11 +6,12 @@ export function Routes() {
     const { JWT, logout } = useAuthContext()
     
     if (JWT === null) {
-        return <MainPage />
+        return <Home />
     }
 
     return (
         <>
+            <MainPage />
             <h1>Autenticado</h1>
             <button onClick={logout}>Sair</button>
         </>

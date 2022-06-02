@@ -1,21 +1,16 @@
-import React from 'react';
-
-import Header from '../../components/Header';
 import { Breadcrumbs } from '../../components/Breadcrumbs';
 
-const MainMenu: React.FC = () => {
-  const paths = [
-    {
-      pathName: 'Página inicial',
-      link: 'deslocamentos'
-    }
-  ];
+const paths = [
+  {
+    pathName: 'Página inicial',
+    link: 'deslocamentos'
+  }
+];
 
+export function Homepage() {
   return (
     <>    
       <div className="flex h-screen">
-        <Header />
-        
         <div className="container  mx-auto md:container md:mx-auto py-[126px] px-[67px]">
           <Breadcrumbs paths={paths}/>
 
@@ -82,5 +77,3 @@ const MainMenu: React.FC = () => {
     </>
   )
 }
-
-export default MainMenu;

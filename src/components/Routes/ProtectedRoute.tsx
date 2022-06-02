@@ -1,5 +1,8 @@
-import { ReactNode, useEffect } from "react"
+import { ReactNode, useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom";
+
+import { Header } from "../Header";
+import { Sidebar } from "../Sidebar";
 import { Spinner } from "../Spinner";
 
 interface PrivateRoutesProps {
@@ -9,6 +12,7 @@ interface PrivateRoutesProps {
 
 export function PrivateRoute({ JWT, children }: PrivateRoutesProps) {
     const navigate = useNavigate()
+    const [openSidebar, setOpenSidebar] = useState(false)
 
     useEffect(() => {
         if (JWT === null) {
@@ -24,7 +28,12 @@ export function PrivateRoute({ JWT, children }: PrivateRoutesProps) {
     else { 
         return (
             <>
-                { children }
+                <Header isSidebarOpened={openSidebar} openSidebar={setOpenSidebar} />
+
+                <div className="flex flex-row w-full h-[calc(100vh-6rem)]">
+                    <Sidebar isSidebarOpened={openSidebar} />
+                    { children }
+                </div>
             </>
         )
     }

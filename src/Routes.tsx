@@ -5,7 +5,7 @@ import { PublicRoute } from "./components/Routes/PublicRoute";
 import { PrivateRoute } from "./components/Routes/ProtectedRoute";
 
 import { Home } from "./pages/Home";
-import MainPage from "./pages/MainPage";
+import { Homepage } from "./pages/Homepage";
 
 export function Routes() {
     const { JWT, logout } = useAuthContext()
@@ -25,7 +25,7 @@ export function Routes() {
               path={'/deslocamentos'} 
               element={
                 <PrivateRoute JWT={JWT}>
-                    <MainPage />
+                    <Homepage />
                 </PrivateRoute>
               } 
             />

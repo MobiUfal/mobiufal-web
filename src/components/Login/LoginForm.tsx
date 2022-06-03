@@ -73,7 +73,6 @@ export default function LoginForm() {
               
               Object.entries(errorsFromYup).forEach(([key, value]: any) => {      
                 if(key === 'email') {
-                  console.log("AQUI")
                   setEmailValidation(value);
                 } else if(key === 'password') {
                   setPasswordValidation(value);

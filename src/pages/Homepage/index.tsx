@@ -3,26 +3,29 @@ import { Breadcrumbs } from '../../components/Breadcrumbs';
 const paths = [
   {
     pathName: 'Página inicial',
-    link: 'deslocamentos'
+    link: '/deslocamentos'
   }
 ];
 
 export function Homepage() {
   return (
     <>    
-      <div className="flex h-screen">
-        <div className="container  mx-auto md:container md:mx-auto py-[126px] px-[67px]">
-          <Breadcrumbs paths={paths}/>
+      <div className="h-full w-full">
+        <div className="container mx-auto md:container md:mx-auto mt-[22px] px-[67px]">
 
-          <div className="h-full mt-20 border-solid border-2 border-[#000000]-600 rounded-[15px]">
+          <Breadcrumbs paths={paths}/>
+        </div>
+        <div className="container mx-auto md:container md:mx-auto py-[91px] px-[67px]">
+
+          <div className="h-full border-solid border-2 border-[#000000]-600 rounded-[15px]">
             
-            <div className="ml-8 flex flex-col">
+            <div className="ml-[32px] mt-[31px]flex flex-col">
               <h1 className='text-black mt-[31px] lg:text-[48px] sm:text-[28px] '>Últimos deslocamentos</h1>
               
               <span className='text-[#000000]/60 mt-[12px]'>Acompanhe em tempo real tudo o que está acontecendo</span>
             </div>
 
-            <div className='px-[60px] mt-[58px] overflow-x-auto overflow-y-auto h-full w-full'>
+            <div className='px-[60px] mt-[63px] pb-[180px] overflow-x-auto overflow-y-auto h-full w-full'>
               <table className='table-auto min-w-full text-center border-collapse border border-[#B9B9B9] overflow-hidden '>
                 <thead className='bg-[#000000]/5 text-black'>
                   <tr>

@@ -1,7 +1,7 @@
-import { SectionPage } from "./SectionPage";
+import { BsHouseDoorFill } from 'react-icons/bs'
+import { FaUserCircle } from 'react-icons/fa'
 
-import HomeLogo from '../../assets/Home.svg'
-import Profile from '../../assets/Profile.svg'
+import { SectionPage } from "./SectionPage";
 import { SubsectionPage } from "./SubsectionPage";
 
 interface SidebarProps {
@@ -16,13 +16,13 @@ export function Sidebar({ isSidebarOpened }: SidebarProps) {
       <nav className="flex flex-col gap-y-3.5">
         <SectionPage 
           sectionName='Página Inicial'
-          iconLink={HomeLogo}
+          Icon={BsHouseDoorFill}
           sectionLink='/deslocamentos'
         />
 
         <SectionPage 
           sectionName='Gerenciar Usuários'
-          iconLink={Profile}
+          Icon={FaUserCircle}
           sectionLink='/users'
         >
           <nav className="flex flex-col gap-y-3.5">

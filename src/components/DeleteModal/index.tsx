@@ -1,28 +1,21 @@
 import { Dialog, Transition } from '@headlessui/react'
-import { Fragment } from 'react'
+import { Fragment, useState } from 'react'
 import { AiOutlineClose } from 'react-icons/ai';
-
-type UserRequestor = {
-  name: string;
-  email: string;
-  cpf: string;
-  phone: string;
-  affiliation: string;
-  course_sector: string;
-}
 
 interface ModalProps {
   isOpen: boolean;
   closeModal: () => void;
-  user: UserRequestor;
+  textTitle?: string;
+  handleCancel: (id: (number | undefined)) => void;
 }
 
-export const InfoModal = ({ isOpen, closeModal, user }: ModalProps) => {
-  
+
+export const DeleteModal = ({ isOpen, closeModal, textTitle, handleCancel }: ModalProps) => {
+
   return (
     <>
       <Transition appear show={isOpen} as={Fragment}>
-        <Dialog as="div" className="relative z-10" onClose={closeModal}>
+      <Dialog as="div" className="relative z-10" onClose={closeModal}>
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"
@@ -48,9 +41,9 @@ export const InfoModal = ({ isOpen, closeModal, user }: ModalProps) => {
               >
                 <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white text-left align-middle shadow-xl transition-all">
                   
-                  <div className="p-6 w-full flex bg-[#D9D9D9] justify-between">
-                    <Dialog.Title as="h3" className="text-[28px] font-medium leading-6 text-gray-900">
-                      {user.name}
+                  <div className="p-6 w-full flex bg-[#ff6961] justify-between">
+                    <Dialog.Title as="h3" className="text-[24px] font-medium leading-6 text-[#fff]-900">
+                      Deseja realmente cancelar {textTitle}?
                     </Dialog.Title>
                     <button
                       type="button"
@@ -61,14 +54,24 @@ export const InfoModal = ({ isOpen, closeModal, user }: ModalProps) => {
                     </button>
                   </div>
 
-                  <div className="mt-2 p-6">
-                    <p className="text-[18px] text-black">Email: {user.email}</p>
-                    <p className="text-[18px] text-black">CPF: {user.cpf}</p>
-                    <p className="text-[18px] text-black">Telefone: {user.phone}</p>
-                    <p className="text-[18px] text-black">Vínculo com a UFAL: {user.affiliation}</p>
-                    <p className="text-[18px] text-black">Curso: {user.course_sector}</p>
-                    <p className="text-[18px] text-black">Possui experiência com mobilidade de PcD?</p>
-                  </div>                  
+                  <div className="mt-4 p-6 flex justify-end">
+                  <button
+                      type="button"
+                      className="inline-flex justify-center rounded-md border border-transparent bg-gray-200 px-4 py-2 text-sm font-medium text-gray-900 hover:bg-gray-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                      onClick={closeModal}
+                    >
+                      Fechar
+                    </button>
+
+                    <button
+                      type="button"
+                      className="ml-2 inline-flex justify-center rounded-md border border-transparent bg-red-100 px-4 py-2 text-sm font-medium text-red-900 hover:bg-red-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                      onClick={handleCancel}
+                    >
+                      Cancelar
+                    </button>
+                  </div>
+
                 </Dialog.Panel>
               </Transition.Child>
             </div>

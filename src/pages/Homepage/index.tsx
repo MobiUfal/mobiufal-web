@@ -1,4 +1,7 @@
+import { useEffect, useState } from 'react';
 import { Breadcrumbs } from '../../components/Breadcrumbs';
+import { api } from '../../services/api';
+import { formatDate } from '../../utils/formatDate';
 
 const paths = [
   {
@@ -7,7 +10,54 @@ const paths = [
   }
 ];
 
+interface DisplacementsData {
+  id: number;
+  time: string;
+  origin: string;
+  origin_details: string;
+  destination: string;
+  destination_details: string;
+  status: number;
+  requester: {
+    id: number;
+    name: string;
+  }
+  voluntary: {
+    id: number;
+    name: string;
+  }
+}
+
+type ResponseDto = {
+  status: boolean;
+  message: string;
+  data: DisplacementsData[];
+}
+
+
 export function Homepage() {
+  const [displacements, setDisplacements] = useState<DisplacementsData[]>([]);
+
+  useEffect(() => {
+    async function loadDisplacements() {
+      const response = await api.get<ResponseDto>(
+        '/locomotion/',
+      );
+      
+      const { data } = response.data;
+      setDisplacements(
+        data.map(displacement  => {
+          return {
+            ...displacement,
+            time: formatDate(displacement.time),
+          };
+        }),
+      );
+    }
+
+    loadDisplacements();
+  }, []);
+  
   return (
     <>    
       <div className="h-full w-full">
@@ -19,7 +69,7 @@ export function Homepage() {
 
           <div className="h-full border-solid border-2 border-[#000000]-600 rounded-[15px]">
             
-            <div className="ml-[32px] mt-[31px]flex flex-col">
+            <div className="ml-[32px] mt-[31px] flex flex-col">
               <h1 className='text-black mt-[31px] lg:text-[48px] sm:text-[28px] '>Últimos deslocamentos</h1>
               
               <span className='text-[#000000]/60 mt-[12px]'>Acompanhe em tempo real tudo o que está acontecendo</span>
@@ -37,40 +87,18 @@ export function Homepage() {
                     <th className="border border-[#B9B9B9] px-4 py-2">Status</th>
                   </tr>
                 </thead>
-
                 <tbody>
-                  <tr className="border border-black">
-                    <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">27/05/2022, 17:00</td>
-                    <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">IM, sala 2</td>
-                    <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">Biblioteca</td>
-                    <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">Sandro</td>
-                    <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">Procurando...</td>
-                    <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">Pendente</td>
-                  </tr>
-                  <tr className="border border-black">
-                    <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">27/05/2022, 17:00</td>
-                    <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">IM, sala 2</td>
-                    <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">Biblioteca</td>
-                    <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">Sandro</td>
-                    <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">Procurando...</td>
-                    <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">Pendente</td>
-                  </tr>
-                  <tr className="border border-black">
-                    <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">27/05/2022, 17:00</td>
-                    <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">IM, sala 2</td>
-                    <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">Biblioteca</td>
-                    <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">Sandro</td>
-                    <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">Procurando...</td>
-                    <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">Pendente</td>
-                  </tr>
-                  <tr className="border border-black">
-                    <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">27/05/2022, 17:00</td>
-                    <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">IM, sala 2</td>
-                    <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">Biblioteca</td>
-                    <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">Sandro</td>
-                    <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">Procurando...</td>
-                    <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">Pendente</td>
-                  </tr>
+                {displacements.length !== 0 && (displacements.map(displacement => (
+
+                    <tr key={displacement.id} className="border border-black">
+                      <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">{displacement.time}</td>
+                      <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">{displacement.origin}</td>
+                      <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">{displacement.destination}</td>
+                      <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">{displacement.requester.name}</td>
+                      <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">{displacement.voluntary ? displacement.voluntary.name : "Procurando..."}</td>
+                      <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">{displacement.status}</td>
+                    </tr>
+                )))}                
                 </tbody>
               </table>
             </div>

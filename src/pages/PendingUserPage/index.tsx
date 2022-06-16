@@ -1,9 +1,14 @@
+import { useState, useEffect, useCallback } from 'react'
 import { Breadcrumbs } from '../../components/Breadcrumbs';
 import { TiDeleteOutline } from 'react-icons/ti'; 
 import { AiOutlineCheckCircle } from 'react-icons/ai'; 
 import { HiOutlineDotsCircleHorizontal as HiDotsCircle } from 'react-icons/hi';
-import { useState } from 'react'
 import { InfoModal } from '../../components/InfoModal';
+import { api } from '../../services/api';
+import { formatDate } from '../../utils/formatDate';
+import { toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+import { DeleteModal } from '../../components/DeleteModal';
 
 const paths = [
   {
@@ -16,41 +21,95 @@ const paths = [
   }
 ];
 
-type User = {
+interface UserRequester {
+  id: number;
   name: string;
+  role: string;
   email: string;
   cpf: string;
-  phone_number: string;
-  linkWithUfal: string;
-  course: string;
-  experience: string;
+  phone: string;
+  affiliation: string;
+  course_sector: string;
 }
 
-const user: User = {
-  name: "Amanda",
-  email: "amdl@ic.ufal.br",
-  cpf: "213.123.123-45",
-  phone_number: "(31)99312-1234",
-  linkWithUfal: "Discente",
-  course: "Ciencia da computacao",
-  experience: "Sim"
+interface PendingDisplacementsData {
+  id: number;
+  time: string;
+  origin: string;
+  origin_details: string;
+  destination: string;
+  destination_details: string;
+  status: number;
+  requester: UserRequester;
+  voluntary: {
+    id: number;
+    name: string;
+  }
 }
+
+type ResponseDto = {
+  status: boolean;
+  message: string;
+  data: PendingDisplacementsData[];
+}
+
 
 export function PendingUserPage() {
-
   let [isOpen, setIsOpen] = useState(false);
+  let [idToCancel, setIdToCancel] = useState<number>();
+  let [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
 
-  function closeModal() {
-    setIsOpen(false)
-  }
+  const [pendingDisplacements, setPendingDisplacements] = useState<PendingDisplacementsData[]>([]);
+  const [userDetails, setUserDetails] = useState<UserRequester>({} as UserRequester);
 
-  function openModal() {
-    setIsOpen(true)
-  }
+  const handleCancelRequest = useCallback(async (id: (number | undefined)) => {
+    try {
+      if(id) {
+        // await api.post('/locomotion/cancel', {
+        //   locomotionId: id
+        // });
+
+        // toast.success('Deslocamento cancelado com sucesso.', {
+        //   position: toast.POSITION.TOP_RIGHT,
+        //   autoClose: 2500
+        // });
+      }
+    } catch (err) {
+      toast.error('Não foi possível cancelar o deslocamento, por favor tente novamente.', {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 2500
+      });
+    }
+  }, [])
+
+  useEffect(() => {
+    async function loadDisplacements() {
+      const response = await api.get<ResponseDto>(
+        '/locomotion/pending',
+      );
+      
+      const { data } = response.data;
+      setPendingDisplacements(
+        data.map(displacement  => {
+          return {
+            ...displacement,
+            time: formatDate(displacement.time),
+          };
+        }),
+      );
+    }
+
+    loadDisplacements();
+  }, []);
 
   return (
     <>
-      <InfoModal isOpen={isOpen} closeModal={closeModal} user={user} />
+      <InfoModal isOpen={isOpen} closeModal={() => setIsOpen(false)} user={userDetails} />
+      <DeleteModal isOpen={isDeleteModalOpen} 
+        closeModal={() => setDeleteModalOpen(false)} 
+        textTitle={"deslocamento"} 
+        handleCancel={() => handleCancelRequest(idToCancel)} 
+      />
       <div className="h-full w-full">
         <div className="container mx-auto md:container md:mx-auto mt-[22px] px-[67px]">
           <Breadcrumbs paths={paths}/>
@@ -78,78 +137,28 @@ export function PendingUserPage() {
                 </thead>
 
                 <tbody>
-                  <tr className="border border-black">
-                    <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">Amanda</td>
-                    <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">Voluntário</td>
-                    <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">Aguardando aprovação</td>
-                    <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">
-                      <div className='flex justify-center align-center'>
-                        <button className='mr-[18px]'>
-                          <TiDeleteOutline size={34.5} color={"#FF0000"} />
-                        </button>
-                        <button className='mr-[18px]'>
-                          <AiOutlineCheckCircle size={30} color={"#40F600"} />
-                        </button>
-                        <button onClick={() => openModal()}>
-                          <HiDotsCircle size={31} color={"#1F3E8C"} />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr className="border border-black">
-                    <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">Paula</td>
-                    <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">Solicitante</td>
-                    <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">Aguardando aprovação</td>
-                    <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">
-                      <div className='flex justify-center align-center'>
-                        <button className='mr-[18px]'>
-                          <TiDeleteOutline size={34.5} color={"#FF0000"} />
-                        </button>
-                        <button className='mr-[18px]'>
-                          <AiOutlineCheckCircle size={30} color={"#40F600"} />
-                        </button>
-                        <button>
-                          <HiDotsCircle size={31} color={"#1F3E8C"} />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr className="border border-black">
-                    <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">Fernando</td>
-                    <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">Solicitante</td>
-                    <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">Aguardando aprovação</td>
-                    <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">
-                      <div className='flex justify-center align-center'>
-                        <button className='mr-[18px]'>
-                          <TiDeleteOutline size={34.5} color={"#FF0000"} />
-                        </button>
-                        <button className='mr-[18px]'>
-                          <AiOutlineCheckCircle size={30} color={"#40F600"} />
-                        </button>
-                        <button>
-                          <HiDotsCircle size={31} color={"#1F3E8C"} />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr className="border border-black">
-                    <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">Michael Jackson</td>
-                    <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">Solicitante</td>
-                    <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">Acesso bloqueado</td>
-                    <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">
-                      <div className='flex justify-center align-center'>
-                        <button className='mr-[18px]'>
-                          <TiDeleteOutline size={34.5} color={"#FF0000"} />
-                        </button>
-                        <button className='mr-[18px]'>
-                          <AiOutlineCheckCircle size={30} color={"#40F600"} />
-                        </button>
-                        <button>
-                          <HiDotsCircle size={31} color={"#1F3E8C"} />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
+                  {pendingDisplacements.length !== 0 && pendingDisplacements.map(displacement => (
+
+                    <tr key={displacement.id} className="border border-black">
+                      <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">{displacement.requester.name}</td>
+                      <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">{displacement.requester.role}</td>
+                      <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">{displacement.status}</td>
+                      <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">
+                        <div className='flex justify-center align-center'>
+                          <button className='mr-[18px]' onClick={() => {setDeleteModalOpen(!isDeleteModalOpen); setIdToCancel(displacement.id)}}>
+                            <TiDeleteOutline size={34.5} color={"#FF0000"} 
+                            />
+                          </button>
+                          <button className='mr-[18px]'>
+                            <AiOutlineCheckCircle size={30} color={"#40F600"} />
+                          </button>
+                          <button onClick={() => {setIsOpen(!isOpen); setUserDetails(displacement.requester);}}>
+                            <HiDotsCircle size={31} color={"#1F3E8C"} />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}                  
                 </tbody>
               </table>
             </div>

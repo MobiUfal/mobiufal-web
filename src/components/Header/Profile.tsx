@@ -1,9 +1,9 @@
-import ProfileImg from '../../assets/Profile.svg'
+import { FaUserCircle } from 'react-icons/fa'
 
 export function Profile() {
     return (
         <button>
-            <img src={ProfileImg} alt="Perfil" />
+            <FaUserCircle className="w-14 h-14" />
         </button>
     )
 }

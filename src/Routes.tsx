@@ -24,7 +24,7 @@ export function Routes() {
             />
 
             <Route 
-              path={'/deslocamentos'} 
+              path={'/displacements'} 
               element={
                 <PrivateRoute JWT={JWT}>
                     <Homepage />
@@ -33,7 +33,7 @@ export function Routes() {
             />
 
             <Route 
-              path={'/gerenciar-usuarios/usuarios-pendentes'} 
+              path={'/users/pending'} 
               element={
                 <PrivateRoute JWT={JWT}>
                     <PendingUserPage />
@@ -42,7 +42,7 @@ export function Routes() {
             />
 
             <Route 
-              path={'/gerenciar-usuarios/carga-horaria'} 
+              path={'/users/workload'} 
               element={
                 <PrivateRoute JWT={JWT}>
                     <WorkLoadPage />

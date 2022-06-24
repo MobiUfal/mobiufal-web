@@ -13,11 +13,11 @@ import { DeleteModal } from '../../components/DeleteModal';
 const paths = [
   {
     pathName: 'Gerenciar Usuários',
-    link: '/gerenciar-usuarios/usuarios-pendentes'
+    link: '/users/pending'
   },
   {
     pathName: 'Usuários pendentes',
-    link: '/gerenciar-usuarios/usuarios-pendentes'
+    link: '/users/pending'
   }
 ];
 

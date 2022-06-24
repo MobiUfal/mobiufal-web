@@ -3,11 +3,11 @@ import { Breadcrumbs } from '../../components/Breadcrumbs';
 const paths = [
   {
     pathName: 'Gerenciar Usuários',
-    link: '/gerenciar-usuarios/carga-horaria'
+    link: '/users/workload'
   },
   {
     pathName: 'Carga horária',
-    link: '/gerenciar-usuarios/carga-horaria'
+    link: '/users/workload'
   }
 ];
 

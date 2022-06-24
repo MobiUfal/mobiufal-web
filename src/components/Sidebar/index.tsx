@@ -17,13 +17,13 @@ export function Sidebar({ isSidebarOpened }: SidebarProps) {
         <SectionPage 
           sectionName='Página Inicial'
           Icon={BsHouseDoorFill}
-          sectionLink='/deslocamentos'
+          sectionLink='/displacements'
         />
 
         <SectionPage 
           sectionName='Gerenciar Usuários'
           Icon={FaUserCircle}
-          sectionLink='/users'
+          sectionLink='/users/pending'
         >
           <nav className="flex flex-col gap-y-3.5">
             <SubsectionPage

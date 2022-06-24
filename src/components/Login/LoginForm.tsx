@@ -56,7 +56,7 @@ export default function LoginForm() {
             autoClose: 2500
           });
 
-          navigate('/deslocamentos')
+          navigate('/displacements')
         } catch (err: any | AxiosError | Yup.ValidationError) {
           if (axios.isAxiosError(err)) {
             console.log(err.message)

@@ -6,7 +6,7 @@ import { formatDate } from '../../utils/formatDate';
 const paths = [
   {
     pathName: 'Página inicial',
-    link: '/deslocamentos'
+    link: '/displacements'
   }
 ];
 

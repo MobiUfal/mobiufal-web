@@ -8,7 +8,7 @@ import { api } from '../../services/api';
 import { formatDate } from '../../utils/formatDate';
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-import { DeleteModal } from '../../components/DeleteModal';
+// import { DeleteModal } from '../../components/DeleteModal';
 
 const paths = [
   {
@@ -57,7 +57,7 @@ type ResponseDto = {
 export function PendingUserPage() {
   let [isOpen, setIsOpen] = useState(false);
   let [idToCancel, setIdToCancel] = useState<number>();
-  let [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
+  // let [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
 
   const [pendingDisplacements, setPendingDisplacements] = useState<PendingDisplacementsData[]>([]);
   const [userDetails, setUserDetails] = useState<UserRequester>({} as UserRequester);
@@ -105,11 +105,11 @@ export function PendingUserPage() {
   return (
     <>
       <InfoModal isOpen={isOpen} closeModal={() => setIsOpen(false)} user={userDetails} />
-      <DeleteModal isOpen={isDeleteModalOpen} 
+      {/* <DeleteModal isOpen={isDeleteModalOpen} 
         closeModal={() => setDeleteModalOpen(false)} 
         textTitle={"deslocamento"} 
         handleCancel={() => handleCancelRequest(idToCancel)} 
-      />
+      /> */}
       <div className="h-full w-full">
         <div className="container mx-auto md:container md:mx-auto mt-[22px] px-[67px]">
           <Breadcrumbs paths={paths}/>
@@ -145,10 +145,10 @@ export function PendingUserPage() {
                       <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">{displacement.status}</td>
                       <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">
                         <div className='flex justify-center align-center'>
-                          <button className='mr-[18px]' onClick={() => {setDeleteModalOpen(!isDeleteModalOpen); setIdToCancel(displacement.id)}}>
+                          {/* <button className='mr-[18px]' onClick={() => {setDeleteModalOpen(!isDeleteModalOpen); setIdToCancel(displacement.id)}}>
                             <TiDeleteOutline size={34.5} color={"#FF0000"} 
                             />
-                          </button>
+                          </button> */}
                           <button className='mr-[18px]'>
                             <AiOutlineCheckCircle size={30} color={"#40F600"} />
                           </button>

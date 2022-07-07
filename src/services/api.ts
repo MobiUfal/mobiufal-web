@@ -1,10 +1,9 @@
 import axios from 'axios' 
 import { TOKEN_KEY } from '../hooks/useAuth';
 
-const BASE_URL = 'http://localhost:3000/';
 
 export const api = axios.create({
-  baseURL: BASE_URL,
+  baseURL: import.meta.env.VITE_API_BASE_URL,
 });
 
 api.interceptors.request.use(async config => {

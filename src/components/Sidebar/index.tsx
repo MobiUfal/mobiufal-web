@@ -11,7 +11,7 @@ interface SidebarProps {
 export function Sidebar({ isSidebarOpened }: SidebarProps) {
   return (
     <aside 
-      className={`overflow-hidden z-1 py-[calc(2.25rem+12px)] translate-y-[-12px] h-[calc(100vh-6rem+12px)] flex flex-col bg-[#373737] rounded-br-xl ease-in-out duration-300 ${isSidebarOpened ? "w-[260px]" : "w-0"}`}
+      className={`overflow-hidden z-1 py-[calc(2.25rem+12px)] translate-y-[-12px] h-[calc(100vh-6rem+52px)] flex flex-col bg-[#373737] rounded-br-xl ease-in-out duration-300 ${isSidebarOpened ? "w-[260px]" : "w-0"}`}
     >
       <nav className="flex flex-col gap-y-3.5">
         <SectionPage 

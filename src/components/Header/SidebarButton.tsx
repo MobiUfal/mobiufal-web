@@ -9,9 +9,8 @@ export function SidebarButton({ isSidebarOpened, openSidebar }: SidebarButtonPro
     return (
         <button 
           onClick={() => openSidebar(!isSidebarOpened)}
-          className="mr-11"
         >
-            <img src={Hamburger} alt="Botão da Sidebar" />
+            <img src={Hamburger} alt="Botão da Sidebar" className='h-[24px] w-[35px]'/>
         </button>
     )
 }

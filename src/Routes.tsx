@@ -8,6 +8,7 @@ import { Home } from "./pages/Home";
 import { Homepage } from "./pages/Homepage";
 import { PendingUserPage } from "./pages/PendingUserPage";
 import { WorkLoadPage } from "./pages/WorkLoadPage";
+import { InfoDetailsUserPage } from "./pages/InfoDetailsUserPage";
 
 export function Routes() {
     const { JWT, logout } = useAuthContext()
@@ -46,6 +47,15 @@ export function Routes() {
               element={
                 <PrivateRoute JWT={JWT}>
                     <WorkLoadPage />
+                </PrivateRoute>
+              }
+            />
+
+            <Route 
+              path={'/users/pending/details/:id'} 
+              element={
+                <PrivateRoute JWT={JWT}>
+                    <InfoDetailsUserPage />
                 </PrivateRoute>
               }
             />

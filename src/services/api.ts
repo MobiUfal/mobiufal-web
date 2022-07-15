@@ -2,9 +2,10 @@ import axios from 'axios'
 import { TOKEN_KEY } from '../hooks/useAuth';
 
 const BASE_URL = 'http://localhost:3000/';
+const BASE_URL_DEV = 'https://mobiufal-api.herokuapp.com/';
 
 export const api = axios.create({
-  baseURL: BASE_URL,
+  baseURL: BASE_URL_DEV,
 });
 
 api.interceptors.request.use(async config => {

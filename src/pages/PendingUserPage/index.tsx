@@ -1,5 +1,8 @@
 import { useState, useEffect, useCallback } from 'react'
 import { Breadcrumbs } from '../../components/Breadcrumbs';
+import { CustomInput } from '../../components/CustomInput';
+import { DropdownInput } from '../../components/DropdownInput';
+import { FilterButton } from '../../components/FilterButton';
 import { TiDeleteOutline } from 'react-icons/ti'; 
 import { AiOutlineCheckCircle } from 'react-icons/ai'; 
 import { HiOutlineDotsCircleHorizontal as HiDotsCircle } from 'react-icons/hi';
@@ -9,17 +12,6 @@ import { formatDate } from '../../utils/formatDate';
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { DeleteModal } from '../../components/DeleteModal';
-
-const paths = [
-  {
-    pathName: 'Gerenciar Usuários',
-    link: '/gerenciar-usuarios/usuarios-pendentes'
-  },
-  {
-    pathName: 'Usuários pendentes',
-    link: '/gerenciar-usuarios/usuarios-pendentes'
-  }
-];
 
 interface UserRequester {
   id: number;
@@ -39,7 +31,7 @@ interface PendingDisplacementsData {
   origin_details: string;
   destination: string;
   destination_details: string;
-  status: number;
+  status: string;
   requester: UserRequester;
   voluntary: {
     id: number;
@@ -57,6 +49,8 @@ type ResponseDto = {
 export function PendingUserPage() {
   let [isOpen, setIsOpen] = useState(false);
   let [idToCancel, setIdToCancel] = useState<number>();
+  let [status, setStatus] = useState<String[]>([]);
+  let [types, setTypes] = useState<String[]>([]);
   let [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
 
   const [pendingDisplacements, setPendingDisplacements] = useState<PendingDisplacementsData[]>([]);
@@ -85,18 +79,26 @@ export function PendingUserPage() {
   useEffect(() => {
     async function loadDisplacements() {
       const response = await api.get<ResponseDto>(
-        '/locomotion/pending',
+        '/user',
       );
       
       const { data } = response.data;
+      console.log(data)
+      const statusAux = new Set<String>();
+      const typesAux = new Set<String>();
+      
       setPendingDisplacements(
         data.map(displacement  => {
+          statusAux.add(displacement.status);
+          typesAux.add(displacement.requester.role);
           return {
             ...displacement,
             time: formatDate(displacement.time),
           };
         }),
       );
+      setStatus(Array.from(statusAux));
+      setTypes(Array.from(typesAux));
     }
 
     loadDisplacements();
@@ -111,22 +113,34 @@ export function PendingUserPage() {
         handleCancel={() => handleCancelRequest(idToCancel)} 
       />
       <div className="h-full w-full">
-        <div className="container mx-auto md:container md:mx-auto mt-[22px] px-[67px]">
-          <Breadcrumbs paths={paths}/>
-        </div>
-
         <div className="container mx-auto md:container md:mx-auto py-[91px] px-[67px]">
 
-          <div className="h-full border-solid border-2 border-[#000000]-600 rounded-[15px]">
+          <div className="h-full border-solid border-2 border-[#000000]-600 rounded-[15px] bg-[#FFFCF9]">
             
             <div className="ml-[32px] mt-[31px]flex flex-col">
-              <h1 className='text-black mt-[31px] lg:text-[48px] sm:text-[28px] '>Últimos deslocamentos</h1>
-              
-              <span className='text-[#000000]/60 mt-[12px]'>Acompanhe em tempo real tudo o que está acontecendo</span>
+              <h1 className='text-black mt-[31px] lg:text-[48px] sm:text-[28px] '>Gerenciar Usuários</h1>
             </div>
 
+
             <div className='px-[60px] mt-[63px] pb-[180px] overflow-x-auto overflow-y-auto h-full w-full'>
-              <table className='table-auto min-w-full text-center border-collapse border border-[#B9B9B9] overflow-hidden '>
+              <div className='mb-[49px] flex align-center w-full'>
+
+                <div className='mb-[49px] flex align-center justify-center w-full'>
+                  <div className='flex flex-col w-8/12'>
+                    <div className='flex'>
+                      <CustomInput placeholder='Nome'/>
+                      <DropdownInput placeholder='Tipo' data={types} />
+                      <DropdownInput placeholder='Status' data={status} />
+                    </div>                  
+                  </div>
+
+                  <div className='ml-[37px] flex justify-center w-5/12 w-full align-center'>
+                    <FilterButton />
+                  </div>
+                </div>
+              </div>
+              
+              <table className='table-auto min-w-full text-center border-collapse border border-[#B9B9B9] overflow-hidden bg-[#fff]'>
                 <thead className='bg-[#000000]/5 text-black'>
                   <tr>
                     <th className="border border-[#B9B9B9] px-4 py-2">Nome</th>

@@ -3,7 +3,7 @@ import { FaUserCircle } from 'react-icons/fa'
 export function Profile() {
     return (
         <button>
-            <FaUserCircle className="w-14 h-14" />
+            <FaUserCircle className="w-12 h-12" />
         </button>
     )
 }

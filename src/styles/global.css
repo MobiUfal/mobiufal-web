@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 body {
-    @apply text-white font-['Roboto'] bg-[#FFFCF9];
+    @apply text-white font-['Roboto'] bg-[#FFF];
 
     /* bg-[#29AAD7] */
 }

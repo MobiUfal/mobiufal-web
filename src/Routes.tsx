@@ -8,6 +8,8 @@ import { Home } from "./pages/Home";
 import { Homepage } from "./pages/Homepage";
 import { PendingUserPage } from "./pages/PendingUserPage";
 import { WorkLoadPage } from "./pages/WorkLoadPage";
+import { InfoDetailsUserPage } from "./pages/InfoDetailsUserPage";
+import { Configurations } from "./pages/Configurations";
 
 export function Routes() {
     const { JWT, logout } = useAuthContext()
@@ -24,7 +26,7 @@ export function Routes() {
             />
 
             <Route 
-              path={'/deslocamentos'} 
+              path={'/displacements'} 
               element={
                 <PrivateRoute JWT={JWT}>
                     <Homepage />
@@ -33,7 +35,7 @@ export function Routes() {
             />
 
             <Route 
-              path={'/gerenciar-usuarios/usuarios-pendentes'} 
+              path={'/users'} 
               element={
                 <PrivateRoute JWT={JWT}>
                     <PendingUserPage />
@@ -42,10 +44,28 @@ export function Routes() {
             />
 
             <Route 
-              path={'/gerenciar-usuarios/carga-horaria'} 
+              path={'/users/workload'} 
               element={
                 <PrivateRoute JWT={JWT}>
                     <WorkLoadPage />
+                </PrivateRoute>
+              }
+            />
+
+            <Route 
+              path={'/users/pending/details/:id'} 
+              element={
+                <PrivateRoute JWT={JWT}>
+                    <InfoDetailsUserPage />
+                </PrivateRoute>
+              }
+            />
+
+            <Route 
+              path={'/configurations'} 
+              element={
+                <PrivateRoute JWT={JWT}>
+                    <Configurations />
                 </PrivateRoute>
               }
             />

@@ -12,7 +12,7 @@ export function PublicRoute({ JWT, children }: PublicRoutesProps) {
 
     useEffect(() => {
         if (JWT !== null) {
-            navigate('/deslocamentos')
+            navigate('/displacements')
         }
     }, [])
 

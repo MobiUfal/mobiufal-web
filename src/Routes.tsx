@@ -63,7 +63,7 @@ export function Routes() {
             />
 
             <Route 
-              path={'/users/pending/details/:id'} 
+              path={'/users/details/:id'} 
               element={
                 <PrivateRoute JWT={JWT}>
                     <InfoDetailsUserPage />

@@ -30,7 +30,7 @@ export function PrivateRoute({ JWT, children }: PrivateRoutesProps) {
             <>
                 <Header isSidebarOpened={openSidebar} openSidebar={setOpenSidebar} />
 
-                <div className="flex flex-row w-full h-[calc(100vh-6rem)]">
+                <div className="flex flex-row w-full h-full">
                     <Sidebar isSidebarOpened={openSidebar} />
                     { children }
                 </div>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Breadcrumbs } from '../../components/Breadcrumbs';
 import { DropdownInput } from '../../components/DropdownInput';
 import { CustomInput } from '../../components/CustomInput';
@@ -36,35 +36,75 @@ export function Homepage() {
   const [origins, setOrigins] = useState<String[]>([]);
   const [destinations, setDestinations] = useState<String[]>([]);
   const [status, setStatus] = useState<String[]>([]);
+  const [destinationFilter, setDestinationFilter] = useState<string>('');
+  const [originFilter, setOriginFilter] = useState<string>('');
+  const [statusFilter, setStatusFilter] = useState<string>('');
+  const [requesterFilter, setRequesterFilter] = useState<string>('');
+  const [voluntaryFilter, setVoluntaryFilter] = useState<string>('');
 
-  useEffect(() => {
-    async function loadDisplacements() {
-      const response = await api.get<ResponseDto>(
-        '/locomotion/',
-      );
-      
-      const { data } = response.data;
-      const originsAux = new Set<String>();
-      const destinationsAux = new Set<String>();
-      const statusAux = new Set<String>();
-      setDisplacements(
-        data.map(displacement  => {
+  async function loadDisplacements(url: string) {
+    const response = await api.get<ResponseDto>(
+      url
+    );
+    
+    const { data } = response.data;
+    const originsAux = new Set<String>();
+    const destinationsAux = new Set<String>();
+    const statusAux = new Set<String>();
+    originsAux.add('TODOS');
+    destinationsAux.add('TODOS');
+    statusAux.add('TODOS');
+    setDisplacements(
+      data.map(displacement  => {
           originsAux.add(displacement.origin);
           destinationsAux.add(displacement.destination);
           statusAux.add(displacement.status);
-          return {
-            ...displacement,
-            time: formatDate(displacement.time),
-          };
-        }),
-      );
+        return {
+          ...displacement,
+          time: formatDate(displacement.time),
+        };
+      }),
+    );
+    if(url === '/locomotion/') {
       setOrigins(Array.from(originsAux));
       setDestinations(Array.from(destinationsAux));
       setStatus(Array.from(statusAux));
     }
+  }
 
-    loadDisplacements();
+  useEffect(() => {
+    loadDisplacements('/locomotion/');
   }, []);
+
+
+  const filterData = useCallback(() => {
+    async function loadDisplacementsFiltered(originFilter: string, destinationFilter: string, statusFilter: string, requesterFilter: string, voluntaryFilter: string) {
+      let url = '/locomotion';
+      let addOrFirst;
+      if(originFilter && originFilter !== 'TODOS') {
+        url += `?origin=${originFilter.toLowerCase()}`
+      }
+      if(destinationFilter  && destinationFilter !== 'TODOS') {
+        addOrFirst = url.includes('?') ? '&' : '?';
+        url += `${addOrFirst}destination=${destinationFilter.toLowerCase()}`
+      }
+      if(statusFilter  && statusFilter !== 'TODOS') {
+        addOrFirst = url.includes('?') ? '&' : '?';
+        url += `${addOrFirst}status=${statusFilter.toLowerCase()}`
+      }
+      if(requesterFilter) {
+        addOrFirst = url.includes('?') ? '&' : '?';
+        url += `${addOrFirst}requester="${requesterFilter.toLowerCase()}"`
+      }
+      if(voluntaryFilter) {
+        addOrFirst = url.includes('?') ? '&' : '?';
+        url += `${addOrFirst}voluntary=${voluntaryFilter.toLowerCase()}`
+      }
+      console.log(url)
+      loadDisplacements(url);
+    }
+    loadDisplacementsFiltered(originFilter, destinationFilter, statusFilter, requesterFilter, voluntaryFilter);
+  }, [originFilter, destinationFilter, statusFilter, requesterFilter, voluntaryFilter])
   
   return (
     <>    
@@ -84,19 +124,19 @@ export function Homepage() {
               <div className='mb-[49px] flex align-center w-full'>
                 <div className='flex flex-col w-8/12'>
                   <div className='flex'>
-                    <CustomInput placeholder='Data'/>
-                    <DropdownInput placeholder='Origem' data={origins} />
-                    <DropdownInput placeholder='Destino' data={destinations} />
+                    {/* <CustomInput placeholder='Data' value={} ={}/> */}
+                    <DropdownInput placeholder='Origem' data={origins} value={originFilter} onChangeValue={setOriginFilter} />
+                    <DropdownInput placeholder='Destino' data={destinations} value={destinationFilter} onChangeValue={setDestinationFilter} />
                   </div>
                   <div className='mt-[15px] flex'>
-                    <CustomInput placeholder='Solicitante'/>
-                    <CustomInput placeholder='Voluntário'/>
-                    <DropdownInput placeholder='Status' data={status} />
+                    <CustomInput placeholder='Solicitante' value={requesterFilter} onChangeText={setRequesterFilter} />
+                    <CustomInput placeholder='Voluntário' value={voluntaryFilter} onChangeText={setVoluntaryFilter}/>
+                    <DropdownInput placeholder='Status' data={status} value={statusFilter} onChangeValue={setStatusFilter} />
                   </div>
                 </div>
 
                 <div className='ml-[37px] flex justify-center w-5/12 w-full align-center py-[37px]'>
-                  <FilterButton />
+                  <FilterButton onClickValue={filterData}/>
                 </div>
               </div>
               <table className='table-auto min-w-full text-center border-collapse border border-[#B9B9B9] overflow-hidden bg-[#fff]'>

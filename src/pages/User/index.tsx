@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
+import { toast } from "react-toastify";
 import { Spinner } from "../../components/Spinner";
 import { UserApprovalButtons } from "../../components/UserApprovalButtons";
 import { UserDisplacements } from "../../components/UserDisplacements";
@@ -34,33 +35,52 @@ const rolesDict = {
 }
 
 export function User() {
+    const navigate = useNavigate();
     const { id } = useParams();
     const [user, setUser] = useState<UserInfo>({} as UserInfo);
 
+    // this state is used to update this page when it happens any event that changes user information
+    const [updateUser, setUpdateUser] = useState(0); 
+
+    if (id === undefined) {
+        toast.error("This user does not exist", {
+            position: toast.POSITION.TOP_RIGHT
+        });
+
+        navigate("/users"); // redirect to users page
+    }
+
     useEffect(() => {
         async function loadData() {
-            const response = await api.get(`/user/${id}`);
-            const { data } = response 
-
-            const user = {
-                name: data.data.name,
-                social_name: data.data?.social_name,
-                cpf: data.data.cpf,
-                email: data.data.email,
-                phone: data.data.phone,
-                role: data.data.role,
-                profileImg: data.data?.profile_img,
-                deficiency: data.data?.deficiency,
-                course_sector: data.data?.course_sector,
-                approved: data.data.aproved,
-                affiliation: data.data.affiliation,
-            };
-
-            setUser(user);
+            try {
+                const response = await api.get(`/user/${id}`);
+                const { data } = response 
+    
+                const user = {
+                    name: data.data.name,
+                    social_name: data.data?.social_name,
+                    cpf: data.data.cpf,
+                    email: data.data.email,
+                    phone: data.data.phone,
+                    role: data.data.role,
+                    profileImg: data.data?.profile_img,
+                    deficiency: data.data?.deficiency,
+                    course_sector: data.data?.course_sector,
+                    approved: data.data.aproved,
+                    affiliation: data.data.affiliation,
+                };
+    
+                setUser(user);
+            } catch (err) {
+                toast.error("Error while trying to get data from user", {
+                    position: toast.POSITION.TOP_RIGHT
+                });
+            }
+            
         }
 
         loadData();
-    }, [])
+    }, [setUpdateUser])
 
     return (
         <div className="h-full w-full">
@@ -88,7 +108,7 @@ export function User() {
                             />
                         </div>
                             
-                        { user.approved === "PENDING" &&
+                        { user.approved === "APROVED" &&
                             <div className="w-full flex mt-4">
                                 <UserDisplacements 
                                   userId={id}
@@ -97,7 +117,7 @@ export function User() {
                             </div>
                         }
                         
-                        <UserApprovalButtons approved={user.approved} userId={id} />
+                        <UserApprovalButtons approved={user.approved} userId={id} updateUser={updateUser} setUpdateUser={setUpdateUser} />
                     </>                    
                     : <Spinner />
                 }

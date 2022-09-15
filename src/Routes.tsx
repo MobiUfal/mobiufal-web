@@ -7,8 +7,6 @@ import { PrivateRoute } from "./components/Routes/ProtectedRoute";
 import { Home } from "./pages/Home";
 import { Homepage } from "./pages/Homepage";
 import { PendingUserPage } from "./pages/PendingUserPage";
-import { WorkLoadPage } from "./pages/WorkLoadPage";
-import { InfoDetailsUserPage } from "./pages/InfoDetailsUserPage";
 import { Configurations } from "./pages/Configurations";
 import { User } from "./pages/User";
 
@@ -49,24 +47,6 @@ export function Routes() {
               element={
                 <PrivateRoute JWT={JWT}>
                     <User />
-                </PrivateRoute>
-              }
-            />
-
-            <Route 
-              path={'/users/workload'} 
-              element={
-                <PrivateRoute JWT={JWT}>
-                    <WorkLoadPage />
-                </PrivateRoute>
-              }
-            />
-
-            <Route 
-              path={'/users/details/:id'} 
-              element={
-                <PrivateRoute JWT={JWT}>
-                    <InfoDetailsUserPage />
                 </PrivateRoute>
               }
             />

@@ -1,5 +1,7 @@
+import { useState } from "react";
 import { toast } from "react-toastify";
-import { api } from "../../services/api";
+import { api } from "../../../services/api";
+import { CustomButton } from "../../FormComponents/CustomButton/CustomButton";
 
 interface UserApprovalButtonsProps {
     approved: string;
@@ -9,20 +11,26 @@ interface UserApprovalButtonsProps {
 }
 
 export function UserApprovalButtons({ approved, userId, updateUser, setUpdateUser }: UserApprovalButtonsProps) {
+    const [isLoading, setIsLoading] = useState(false);
+
+
     async function handleBlockUser() {
         if (userId != undefined) {
             try {
-                const aprove = false
+                setIsLoading(true);
+                const aprove = false;
                 const response = await api.post('/user/manage/aprove', {
                   aproved: aprove,
                   userId: parseInt(userId as string),
-                })
+                });
 
-                setUpdateUser(updateUser + 1)
+                setUpdateUser(updateUser + 1);
 
                 toast.success("Success blocking user !", {
                     position: toast.POSITION.TOP_RIGHT
                 });
+
+                setIsLoading(false);
             } catch (err) {
                 toast.error("Error while trying to block user !", {
                     position: toast.POSITION.TOP_RIGHT
@@ -40,17 +48,20 @@ export function UserApprovalButtons({ approved, userId, updateUser, setUpdateUse
     async function handleUnlockUser() {
         if (userId != undefined) {
             try {
-                const aprove = true
+                setIsLoading(true);
+                const aprove = true;
                 const response = await api.post('/user/manage/aprove', {
                   aproved: aprove,
                   userId: parseInt(userId),
-                })
+                });
 
-                setUpdateUser(updateUser + 1)
+                setUpdateUser(updateUser + 1);
 
                 toast.success("Success unlocking an user !", {
                     position: toast.POSITION.TOP_RIGHT
                 });
+
+                setIsLoading(false);
             } catch (err) {
                 toast.error("Error while trying to unlock an user !", {
                     position: toast.POSITION.TOP_RIGHT
@@ -67,17 +78,20 @@ export function UserApprovalButtons({ approved, userId, updateUser, setUpdateUse
     async function handleAcceptUser() {
         if (userId != undefined) {
             try {
-                const aprove = true
+                setIsLoading(true);
+                const aprove = true;
                 const response = await api.post('/user/manage/aprove', {
                   aproved: aprove,
                   userId: parseInt(userId),
-                })
+                });
 
-                setUpdateUser(updateUser + 1)
+                setUpdateUser(updateUser + 1);
 
                 toast.success("Success approving user !", {
                     position: toast.POSITION.TOP_RIGHT
                 });
+
+                setIsLoading(false);
             } catch (err) {
                 toast.error("Error while trying to approve an user !", {
                     position: toast.POSITION.TOP_RIGHT
@@ -91,28 +105,44 @@ export function UserApprovalButtons({ approved, userId, updateUser, setUpdateUse
         }
     }
 
-
-
     if (approved === "PENDING") {
         return (
             <div className="absolute bottom-10 right-6  flex w-full justify-end mt-4 gap-6">
-                <button className="w-80 bg-[#F93633] rounded-[100px] text-center py-2" onClick={handleBlockUser}>Bloquear Usuário</button>
-                <button className="w-80 bg-[#29AAD7] rounded-[100px] text-center py-2" onClick={handleAcceptUser}>Aceitar Usuário</button>
+                <CustomButton 
+                  functionOnClick={handleBlockUser}
+                  aditionalStyleClasses={'bg-[#F93633]'}
+                  text={'Bloquear Usuário'}
+                  isLoading={isLoading}  
+                />
+
+                <CustomButton 
+                  functionOnClick={handleAcceptUser}
+                  aditionalStyleClasses={'bg-[#29AAD7]'}
+                  text={'Aceitar Usuário'}
+                  isLoading={isLoading}  
+                />
             </div>
         )
     }
     else if (approved === "APROVED") { // TODO -> OLHAR AQUI
         return (
-            <div className="absolute bottom-10 right-6  flex w-full justify-end mt-4">
-                <button className="w-80 bg-[#F93633] rounded-[100px] text-center py-2" onClick={handleBlockUser}>Bloquear Usuário</button>
-            </div>
+            <CustomButton 
+                functionOnClick={handleBlockUser}
+                aditionalStyleClasses={'bg-[#F93633]'}
+                text={'Bloquear Usuário'}
+                isLoading={isLoading}  
+            />
+          
         )
     }
     else {
         return (
-            <div className="absolute bottom-10 right-6  flex w-full justify-end mt-4">
-                <button className="w-80 bg-[#29AAD7] rounded-[100px] text-center py-1" onClick={handleUnlockUser}>Desbloquear Usuário</button>
-            </div>
+            <CustomButton 
+              functionOnClick={handleUnlockUser}
+              aditionalStyleClasses={'bg-[#29AAD7]'}
+              text={'Desbloquear Usuário'}
+              isLoading={isLoading}  
+            />
         )
     }
 }

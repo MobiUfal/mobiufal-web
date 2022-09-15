@@ -4,9 +4,9 @@ import 'react-toastify/dist/ReactToastify.css'
 
 import { api } from '../../services/api';
 
-import { CustomInput } from '../../components/CustomInput';
-import { DropdownInput } from '../../components/DropdownInput';
-import { FilterButton } from '../../components/FilterButton';
+import { CustomInput } from '../../components/FormComponents/CustomInput';
+import { DropdownInput } from '../../components/FormComponents/DropdownInput';
+import { FilterButton } from '../../components/FormComponents/FilterButton';
 import { BsFillEyeFill } from 'react-icons/bs';
 
 type User = {

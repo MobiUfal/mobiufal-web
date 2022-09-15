@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { api } from "../../services/api";
+import { api } from "../../../services/api";
 
 type Displacement = {
     id: number,
@@ -43,7 +43,7 @@ export function UserDisplacements({ userId, name }: UserDisplacementsProps) {
     }, [])
 
     return (
-        <div className="flex flex-col gap-6 mt-8 mb-36">
+        <div className="flex flex-col gap-6">
             <h1 className="text-3xl font-medium leading-9 text-black">Deslocamentos de {name}</h1>
 
             <table className='table-auto block min-w-full max-h-80 overflow-y-scroll text-center border-collapse border border-[#B9B9B9] bg-[#fff]'>

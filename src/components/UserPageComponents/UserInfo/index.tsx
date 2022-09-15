@@ -1,4 +1,4 @@
-import { CustomInput } from "../CustomInput";
+import { CustomInput } from "../../FormComponents/CustomInput";
 
 interface UserProps {
     name: string;

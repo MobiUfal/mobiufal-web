@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom"
 import { toast } from "react-toastify";
 import { Spinner } from "../../components/Spinner";
-import { UserApprovalButtons } from "../../components/UserApprovalButtons";
-import { UserDisplacements } from "../../components/UserDisplacements";
-import { UserInfo } from "../../components/UserInfo";
+import { UserApprovalButtons } from "../../components/UserPageComponents/UserApprovalButtons";
+import { UserDisplacements } from "../../components/UserPageComponents/UserDisplacements";
+import { UserInfo } from "../../components/UserPageComponents/UserInfo";
 import { api } from "../../services/api";
 
 type UserInfo = {
@@ -80,7 +80,7 @@ export function User() {
         }
 
         loadData();
-    }, [setUpdateUser])
+    }, [updateUser])
 
     return (
         <div className="h-full w-full">
@@ -109,7 +109,7 @@ export function User() {
                         </div>
                             
                         { user.approved === "APROVED" &&
-                            <div className="w-full flex mt-4">
+                            <div className="w-full flex mt-8">
                                 <UserDisplacements 
                                   userId={id}
                                   name={user.name}
@@ -117,7 +117,10 @@ export function User() {
                             </div>
                         }
                         
-                        <UserApprovalButtons approved={user.approved} userId={id} updateUser={updateUser} setUpdateUser={setUpdateUser} />
+                        <div className="w-full flex items-end justify-end mt-20">
+                            <UserApprovalButtons approved={user.approved} userId={id} updateUser={updateUser} setUpdateUser={setUpdateUser} />
+                        </div>
+                        
                     </>                    
                     : <Spinner />
                 }

@@ -3,9 +3,17 @@ import { InputHTMLAttributes } from "react";
 interface CustomInputProps extends InputHTMLAttributes<HTMLInputElement> {
   placeholder?: string;
   label?: string;
+  aditionalStyleClasses?: string;
 }
 
-export const CustomInput = ({placeholder, label, ...rest}: CustomInputProps) => {
+export const CustomInput = ({placeholder, label, aditionalStyleClasses, ...rest}: CustomInputProps) => {
+  let bgColor = 'bg-[#FFFCF9]';
+  const { disabled } = rest;
+
+  if (disabled !== undefined && disabled === true) {
+    bgColor = 'bg-[#000000]/5'; // gray
+  }
+
   return (
     <div className="mt-1 mr-[7px] relative w-full min-w-[184px]">
       { label && 
@@ -15,7 +23,7 @@ export const CustomInput = ({placeholder, label, ...rest}: CustomInputProps) => 
       }
       <input
         type="text"
-        className="w-full px-3 py-2 text-left text-black bg-[#FFFCF9] shadow-sm border border-gray-400 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-500 sm:text-sm shadow-sm"
+        className={`w-full px-3 py-2 text-left text-black ${bgColor} shadow-sm border border-gray-400 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-500 sm:text-sm ` + aditionalStyleClasses}
         placeholder={placeholder}
         {...rest}
       />

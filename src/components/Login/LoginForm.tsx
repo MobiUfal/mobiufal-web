@@ -48,7 +48,7 @@ export default function LoginForm() {
             password,
           })
 
-          const JWT = response.data.data
+          const JWT = response.data.data.token
           login(JWT)
 
           toast.success('login realizado com sucesso. Você será redirecionado para a página principal', {

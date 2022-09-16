@@ -2,8 +2,14 @@
   "name": "mobiufal-web",
   "private": true,
   "version": "0.0.0",
+
+  "engines": {
+    "node": "<=16.x.x",
+    "npm": "<=8.x.x"
+  },
   "scripts": {
     "dev": "vite",
+    "start": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview"
   },

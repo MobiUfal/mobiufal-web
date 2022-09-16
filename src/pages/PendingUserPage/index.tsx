@@ -36,7 +36,7 @@ export function PendingUserPage() {
           id: user.id,
           name: user.name,
           role: user.role,
-          approved: user.aproved, // update aproved word in backend (change aproved to approved in backend api route return)
+          approved: user.approved, // update aproved word in backend (change aproved to approved in backend api route return)
         }
       });
     

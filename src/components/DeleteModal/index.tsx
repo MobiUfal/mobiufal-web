@@ -1,20 +1,20 @@
-import { Dialog, Transition } from '@headlessui/react'
-import { Fragment, useState } from 'react'
-import { AiOutlineClose } from 'react-icons/ai';
+// import { Dialog, Transition } from '@headlessui/react'
+// import { Fragment, useState } from 'react'
+// import { AiOutlineClose } from 'react-icons/ai';
 
-interface ModalProps {
-  isOpen: boolean;
-  closeModal: () => void;
-  textTitle?: string;
-  handleCancel: (id: (number | undefined)) => void;
-}
+// interface ModalProps {
+//   isOpen: boolean;
+//   closeModal: () => void;
+//   textTitle?: string;
+//   handleCancel: (id: (number | undefined)) => void;
+// }
 
 
-export const DeleteModal = ({ isOpen, closeModal, textTitle, handleCancel }: ModalProps) => {
-
+// export const DeleteModal = ({ isOpen, closeModal, textTitle, handleCancel }: ModalProps) => {
+export const DeleteModal = () => {
   return (
     <>
-      <Transition appear show={isOpen} as={Fragment}>
+      {/* <Transition appear show={isOpen} as={Fragment}>
       <Dialog as="div" className="relative z-10" onClose={closeModal}>
           <Transition.Child
             as={Fragment}
@@ -77,7 +77,7 @@ export const DeleteModal = ({ isOpen, closeModal, textTitle, handleCancel }: Mod
             </div>
           </div>
         </Dialog>
-      </Transition>
+      </Transition> */}
     </>
   )
 }

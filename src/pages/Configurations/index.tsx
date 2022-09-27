@@ -1,4 +1,4 @@
-import { CustomInput } from "../../components/CustomInput";
+import { CustomInput } from "../../components/FormComponents/CustomInput";
 
 export function Configurations() {
     return (

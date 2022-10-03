@@ -25,7 +25,7 @@ export function UserDisplacements({ userId, name }: UserDisplacementsProps) {
             const requestedDisplacements = data.data.requested;
             console.log(requestedDisplacements)
 
-            const displacements = requestedDisplacements.map(displacement => {
+            const displacements = requestedDisplacements.map((displacement:any) => {
                 return {
                     id: displacement.id,
                     time: displacement.time,

@@ -13,38 +13,73 @@ type User = {
   id: number;
   name: string;
   role: string;
-  approved: boolean;
+  approved: string;
 }
 
 export function PendingUserPage() {
-  let [status, setStatus] = useState<String[]>([]);
-  let [types, setTypes] = useState<String[]>([]);
+  const [statusAux, setStatusAux] = useState<String[]>([]);
+  const [roleAux, setRoleAux] = useState<String[]>([]);
+  let [statusFilter, setStatusFilter] = useState<string>('');
+  let [nameFilter, setNameFilter] = useState<string>('');
+  let [typeFilter, setTypeFilter] = useState<string>('');
 
   const [users, setUsers] = useState<User[]>([]);
 
-  useEffect(() => {
-    async function loadUsers() {
-      const response = await api.get(
-        '/user',
-      );
-      
-      const rawUsers: User[] = response.data.data;
-      console.log(rawUsers)
 
-      const users = rawUsers.map(user => {
-        return {
-          id: user.id,
-          name: user.name,
-          role: user.role,
-          approved: user.approved, // update aproved word in backend (change aproved to approved in backend api route return)
-        }
-      });
+  async function loadUsers(url: string) {
+    const response = await api.get(
+      url
+    );
     
-      setUsers(users);
-    }
+    const rawUsers: User[] = response.data.data;
+    console.log(rawUsers)
+    const roleAux = new Set<String>();
+    const statusAux = new Set<String>();
+    statusAux.add('TODOS');
+    roleAux.add('TODOS');
 
-    loadUsers();
+    const users = rawUsers.map(user => {
+      statusAux.add(user.aproved);
+      roleAux.add(user.role);
+      return {
+        id: user.id,
+        name: user.name,
+        role: user.role,
+        approved: user.aproved, // update aproved word in backend (change aproved to approved in backend api route return)
+      }
+    });
+  
+    setUsers(users);
+    if(url === '/user/') {
+      setStatusAux(Array.from(statusAux));
+      setRoleAux(Array.from(roleAux));
+    }
+  }
+
+  useEffect(() => {
+    loadUsers('/user/');
   }, []);
+
+  const filterData = useCallback(() => {
+    async function loadUserFiltered(statusFilter: string, nameFilter: string, typeFilter: string) {
+      let url = '/user';
+      let addOrFirst;
+      // if(statusFilter && statusFilter !== 'TODOS') {
+      //   url += `?aproved=${statusFilter.toLowerCase()}`
+      // }
+      if(typeFilter  && typeFilter !== 'TODOS') {
+        addOrFirst = url.includes('?') ? '&' : '?';
+        url += `${addOrFirst}role=${typeFilter.toLowerCase()}`
+      }
+      if(nameFilter) {
+        addOrFirst = url.includes('?') ? '&' : '?';
+        url += `${addOrFirst}name="${nameFilter.toLowerCase()}"`
+      }
+      console.log(url)
+      loadUsers(url);
+    }
+    loadUserFiltered(statusFilter, nameFilter, typeFilter);
+  }, [statusFilter, nameFilter, typeFilter])
 
   return (
     <>
@@ -64,14 +99,14 @@ export function PendingUserPage() {
                 <div className='mb-[49px] flex align-center justify-center w-full'>
                   <div className='flex flex-col w-8/12'>
                     <div className='flex'>
-                      <CustomInput placeholder='Nome'/>
-                      <DropdownInput placeholder='Tipo' data={types} />
-                      <DropdownInput placeholder='Status' data={status} />
+                      <CustomInput placeholder='Nome' value={nameFilter} onChangeText={setNameFilter} />
+                      <DropdownInput placeholder='Tipo' data={roleAux} value={typeFilter} onChangeValue={setTypeFilter}/>
+                      <DropdownInput placeholder='Status' data={statusAux} value={statusFilter} onChangeValue={setStatusFilter} />
                     </div>                  
                   </div>
 
                   <div className='ml-[37px] flex justify-center w-5/12 w-full align-center'>
-                    <FilterButton />
+                    <FilterButton onClickValue={filterData}/>
                   </div>
                 </div>
               </div>

@@ -1,4 +1,4 @@
-import { Fragment, useState } from 'react'
+import { Fragment } from 'react'
 import { Listbox, Transition } from '@headlessui/react'
 import { IoMdArrowDropdown } from 'react-icons/io'
 
@@ -9,19 +9,20 @@ function classNames(...classes: any) {
 interface DropDownProps {
   placeholder: string;
   data: String[];
+  onChangeValue(value: string): void;
+  value: string;
 }
 
-export const DropdownInput = ({ placeholder, data }: DropDownProps) => {
-  const [selected, setSelected] = useState<string>()
+export const DropdownInput = ({ placeholder, data, onChangeValue, value }: DropDownProps) => {
 
   return (
-    <Listbox value={selected} onChange={setSelected}>
+    <Listbox value={value} onChange={e => {onChangeValue(e ? e : '');}}>
       {({ open }) => (
         <>
           <div className="mt-1 mr-[7px] relative w-full min-w-[184px]">
             <Listbox.Button className="relative w-full border border-gray-400 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-gray-500 focus:border-gray-500 sm:text-sm">
               <span className="flex items-center">
-                <span className={classNames(!selected ? 'text-[#79747E]' : 'font-normal', 'block truncate text-black')}>{!selected ? placeholder : selected}</span>
+                <span className={classNames(!value ? 'text-[#79747E]' : 'font-normal', 'block truncate text-black')}>{!value ? placeholder : value}</span>
               </span>
               <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
                 <IoMdArrowDropdown size={20} color="#79747E"/>

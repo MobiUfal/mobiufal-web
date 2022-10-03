@@ -4,7 +4,6 @@ interface CustomInputProps extends InputHTMLAttributes<HTMLInputElement> {
   placeholder?: string;
   label?: string;
   aditionalStyleClasses?: string;
-  onChangeText(value: string): void;
 }
 
 export const CustomInput = ({placeholder, label, aditionalStyleClasses, ...rest}: CustomInputProps) => {

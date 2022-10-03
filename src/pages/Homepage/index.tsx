@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 // import { Breadcrumbs } from '../../components/Breadcrumbs';
 
 import { DropdownInput } from '../../components/FormComponents/DropdownInput';
-import { CustomInput } from '../../components/FormComponents/CustomInput';
+import { CustomInput } from '../../components/CustomInput';
 import { FilterButton } from '../../components/FormComponents/FilterButton';
 import { api } from '../../services/api';
 import { formatDate } from '../../utils/formatDate';

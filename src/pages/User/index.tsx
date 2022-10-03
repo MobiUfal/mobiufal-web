@@ -90,7 +90,7 @@ export function User() {
                   ? <>
                         <div className="w-full flex justify-between items-center">
                             <h1 className="text-3xl font-medium leading-9 text-black">Informações de {user.name}</h1>
-                            <h1 className="text-2xl font-normal leading-7 text-black">{rolesDict[user.role]} ({approvedDict[user.approved]})</h1>
+                            <h1 className="text-2xl font-normal leading-7 text-black">{rolesDict[user.role as keyof typeof rolesDict]} ({approvedDict[user.approved as keyof typeof approvedDict]})</h1>
                         </div>
 
                         <div className="w-full flex mt-4">

@@ -1,8 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
-// import { Breadcrumbs } from '../../components/Breadcrumbs';
+import { CustomInput } from '../../components/FormComponents/CustomInput';
 
 import { DropdownInput } from '../../components/FormComponents/DropdownInput';
-import { CustomInput } from '../../components/CustomInput';
 import { FilterButton } from '../../components/FormComponents/FilterButton';
 import { api } from '../../services/api';
 import { formatDate } from '../../utils/formatDate';
@@ -101,7 +100,6 @@ export function Homepage() {
         addOrFirst = url.includes('?') ? '&' : '?';
         url += `${addOrFirst}voluntary=${voluntaryFilter.toLowerCase()}`
       }
-      console.log(url)
       loadDisplacements(url);
     }
     loadDisplacementsFiltered(originFilter, destinationFilter, statusFilter, requesterFilter, voluntaryFilter);

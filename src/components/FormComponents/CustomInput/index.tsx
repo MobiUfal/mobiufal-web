@@ -4,9 +4,10 @@ interface CustomInputProps extends InputHTMLAttributes<HTMLInputElement> {
   placeholder?: string;
   label?: string;
   aditionalStyleClasses?: string;
+  onChangeText?: (text: string)=> void;
 }
 
-export const CustomInput = ({placeholder, label, aditionalStyleClasses, ...rest}: CustomInputProps) => {
+export const CustomInput = ({placeholder, label, aditionalStyleClasses, onChangeText, ...rest}: CustomInputProps) => {
   let bgColor = 'bg-[#FFFCF9]';
   const { disabled } = rest;
 
@@ -25,6 +26,7 @@ export const CustomInput = ({placeholder, label, aditionalStyleClasses, ...rest}
         type="text"
         className={`w-full px-3 py-2 text-left text-black ${bgColor} shadow-sm border border-gray-400 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-500 sm:text-sm ` + aditionalStyleClasses}
         placeholder={placeholder}
+        onChange={e => {onChangeText && onChangeText(e.target.value)}}
         {...rest}
       />
     </div>

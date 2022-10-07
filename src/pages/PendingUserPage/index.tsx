@@ -9,6 +9,13 @@ import { DropdownInput } from '../../components/FormComponents/DropdownInput';
 import { FilterButton } from '../../components/FormComponents/FilterButton';
 import { BsFillEyeFill } from 'react-icons/bs';
 
+type UserTransiction = {
+  id: number;
+  name: string;
+  role: string;
+  aproved: string;
+}
+
 type User = {
   id: number;
   name: string;
@@ -31,14 +38,14 @@ export function PendingUserPage() {
       url
     );
     
-    const rawUsers: User[] = response.data.data;
+    const rawUsers: UserTransiction[] = response.data.data;
     console.log(rawUsers)
     const roleAux = new Set<String>();
     const statusAux = new Set<String>();
     statusAux.add('TODOS');
     roleAux.add('TODOS');
 
-    const users = rawUsers.map(user => {
+    const users: User[] = rawUsers.map(user => {
       statusAux.add(user.aproved);
       roleAux.add(user.role);
       return {
@@ -49,6 +56,7 @@ export function PendingUserPage() {
       }
     });
   
+    
     setUsers(users);
     if(url === '/user/') {
       setStatusAux(Array.from(statusAux));

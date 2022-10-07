@@ -5,6 +5,7 @@ import { DropdownInput } from '../../components/FormComponents/DropdownInput';
 import { FilterButton } from '../../components/FormComponents/FilterButton';
 import { api } from '../../services/api';
 import { formatDate } from '../../utils/formatDate';
+import { LocomotionStatus } from '../../utils/LocomotionStatus';
 
 interface DisplacementsData {
   id: number;
@@ -158,7 +159,7 @@ export function Homepage() {
                       <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">{displacement.destination}</td>
                       <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">{displacement.requester.name}</td>
                       <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">{displacement.voluntary ? displacement.voluntary.name : "Procurando..."}</td>
-                      <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">{displacement.status}</td>
+                      <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">{LocomotionStatus[displacement.status as keyof typeof LocomotionStatus]}</td>
                     </tr>
                 )))}                
                 </tbody>

@@ -8,6 +8,8 @@ import { CustomInput } from '../../components/FormComponents/CustomInput';
 import { DropdownInput } from '../../components/FormComponents/DropdownInput';
 import { FilterButton } from '../../components/FormComponents/FilterButton';
 import { BsFillEyeFill } from 'react-icons/bs';
+import { UserStatus } from '../../utils/UserStatus';
+import { UserRoles } from '../../utils/UserRoles';
 
 type UserTransiction = {
   id: number;
@@ -72,9 +74,9 @@ export function PendingUserPage() {
     async function loadUserFiltered(statusFilter: string, nameFilter: string, typeFilter: string) {
       let url = '/user';
       let addOrFirst;
-      // if(statusFilter && statusFilter !== 'TODOS') {
-      //   url += `?aproved=${statusFilter.toLowerCase()}`
-      // }
+      if(statusFilter && statusFilter !== 'TODOS') {
+        url += `?aproved=${statusFilter.toLowerCase()}`
+      }
       if(typeFilter  && typeFilter !== 'TODOS') {
         addOrFirst = url.includes('?') ? '&' : '?';
         url += `${addOrFirst}role=${typeFilter.toLowerCase()}`
@@ -134,8 +136,8 @@ export function PendingUserPage() {
 
                     <tr key={user.id} >
                       <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">{user.name}</td>
-                      <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">{user.role}</td>
-                      <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">{user.approved ? 'Aprovado' : 'Aguardando Aprovação'}</td>
+                      <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">{UserRoles[user.role as keyof typeof UserRoles]}</td>
+                      <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">{UserStatus[user.approved as keyof typeof UserStatus]}</td>
                       <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">  
                           <a href={`users/${user.id}`} className="flex justify-center">
                              <BsFillEyeFill size={24} color={"#29AAD7"} />

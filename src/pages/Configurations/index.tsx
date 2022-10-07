@@ -16,7 +16,7 @@ export function Configurations() {
               <form className="flex items-end ml-[50px]">
                 <div className="flex flex-col mr-[35px]">
                     <label htmlFor="workloadInput" className="text-black text-sm leading-6">Definir carga horária por deslocamento</label>
-                   <CustomInput placeholder="X horas (valor numérico)" />
+                   <CustomInput placeholder="X minutos (valor numérico)" />
                 </div>
                 
                 <button className="h-[30px] bg-[#29AAD7] px-[32px] py-[7px] rounded-[100px] font-medium text-sm leading-4">

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { api } from "../../../services/api";
 import { formatDate } from "../../../utils/formatDate";
+import { LocomotionStatus } from "../../../utils/LocomotionStatus";
 import { DropdownInput } from "../../FormComponents/DropdownInput";
 import { FilterButton } from "../../FormComponents/FilterButton";
 
@@ -107,7 +108,7 @@ export function UserDisplacements({ userId, name }: UserDisplacementsProps) {
                             <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">{displacement.source}</td>
                             <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">{displacement.destination}</td>
                             <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">{displacement.requesterName}</td>
-                            <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">{displacement.status}</td>
+                            <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">{LocomotionStatus[displacement.status as keyof typeof LocomotionStatus]}</td>
                         </tr>
                     )))}                
                 </tbody>

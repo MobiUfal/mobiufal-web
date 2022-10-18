@@ -13,7 +13,6 @@ interface UserApprovalButtonsProps {
 export function UserApprovalButtons({ approved, userId, updateUser, setUpdateUser }: UserApprovalButtonsProps) {
     const [isLoading, setIsLoading] = useState(false);
 
-
     async function handleBlockUser() {
         if (userId != undefined) {
             try {

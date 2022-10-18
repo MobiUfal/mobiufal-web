@@ -1,5 +1,5 @@
 import { Logo } from './Logo';
-import { Profile } from './Profile';
+import { Logout } from './Logout';
 import { SidebarButton } from './SidebarButton';
 
 interface HeaderProps {
@@ -16,7 +16,7 @@ export function Header({ isSidebarOpened, openSidebar }: HeaderProps) {
           <Logo />
         </div>
 
-        <Profile />
+        <Logout />
       </header>
     </>
   )

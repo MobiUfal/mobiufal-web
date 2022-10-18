@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { Spinner } from "../../Spinner";
 
 interface CustomButtonProps {
-    functionOnClick: () => void;
+    functionOnClick: (event?: FormEvent) => void;
     aditionalStyleClasses?: string;
     text: string;
     isLoading: boolean;

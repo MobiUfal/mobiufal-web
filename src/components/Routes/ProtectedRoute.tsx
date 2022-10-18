@@ -16,13 +16,15 @@ export function PrivateRoute({ JWT, children }: PrivateRoutesProps) {
 
     useEffect(() => {
         if (JWT === null) {
-            navigate('/')
+            navigate('/');
         }
-    }, [])
+    }, [JWT])
     
     if (JWT === null) {
         return (
-            <Spinner />
+            <div className="w-full h-screen flex justify-center">
+                <Spinner />
+            </div>
         )
     }
     else { 

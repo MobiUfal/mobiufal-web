@@ -8,8 +8,11 @@ import 'react-toastify/dist/ReactToastify.css'
 import getValidationErrors from '../../utils/getValidationErrors'
 import { useAuthContext } from "../../hooks/useAuth"
 import { api } from "../../services/api"
+import { CustomButton } from "../FormComponents/CustomButton/CustomButton"
 
 export default function LoginForm() {
+    const [isLoading, setIsLoading] = useState(false);
+
     const { login } = useAuthContext()
 
     const [email, setEmail] = useState('')
@@ -20,8 +23,9 @@ export default function LoginForm() {
 
     const navigate = useNavigate()
     
-    async function handleLogin(event: React.FormEvent) {
-        event.preventDefault()
+    async function handleLogin(event: React.FormEvent | undefined) {
+        event?.preventDefault()
+        setIsLoading(true);
 
         try {
           setEmailValidation('')
@@ -56,7 +60,7 @@ export default function LoginForm() {
             autoClose: 2500
           });
 
-          navigate('/displacements')
+          navigate('/displacements');
         } catch (err: any | AxiosError | Yup.ValidationError) {
           if (axios.isAxiosError(err)) {
             console.log(err.message)
@@ -79,6 +83,7 @@ export default function LoginForm() {
                 }
                });
               
+               setIsLoading(false);
               return;
             }
 
@@ -87,13 +92,13 @@ export default function LoginForm() {
     }
 
     return (
-        <form className="flex flex-col">
+        <form className="flex flex-col w-full">
                 {emailValidation && <label className="text-[#F93633]">* {emailValidation}</label>}
                 <input 
                   type="email"
                   placeholder="Email"
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-[421px] mb-8 px-4 py-[22px] text-[#49454F] text-2xl leading-6 placeholder:text-[#49454F] border border-black border-opacity-60 rounded"
+                  className="w-full mb-8 px-4 py-[22px] text-[#49454F] text-2xl leading-6 placeholder:text-[#49454F] border border-black border-opacity-60 rounded"
                 />
 
                 {passwordValidation && <label className="text-[#F93633]">* {passwordValidation}</label>}
@@ -101,7 +106,7 @@ export default function LoginForm() {
                   type="password"
                   placeholder="Senha"
                   onChange={(e) => setPassword(e.target.value)}        
-                  className="w-[421px] mb-5 px-4 py-[22px] text-[#49454F] text-2xl leading-6 placeholder:text-[#49454F] border border-black border-opacity-60 rounded"
+                  className="w-full mb-5 px-4 py-[22px] text-[#49454F] text-2xl leading-6 placeholder:text-[#49454F] border border-black border-opacity-60 rounded"
                   />
 
                 <a 
@@ -111,13 +116,13 @@ export default function LoginForm() {
                   Esqueceu a Senha?
                 </a>
 
-                <button 
-                  type="button"
-                  className="w-[336px] mx-auto py-[18px] text-center font-medium text-2xl leading-5 bg-[#F93633] rounded-[100px]"
-                  onClick={(event) => handleLogin(event)}
-                >
-                    Login
-                </button>
+
+                <CustomButton 
+                  functionOnClick={(event) => handleLogin(event)} 
+                  text='Login'
+                  isLoading={isLoading}
+                  aditionalStyleClasses='font-medium text-2xl leading-5 bg-[#F93633] w-3/4 max-w-[336px] mx-auto py-[18px]'
+                />
         </form>
 
         

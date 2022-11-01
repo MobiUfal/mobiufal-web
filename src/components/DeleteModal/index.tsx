@@ -9,7 +9,6 @@
 //   handleCancel: (id: (number | undefined)) => void;
 // }
 
-
 // export const DeleteModal = ({ isOpen, closeModal, textTitle, handleCancel }: ModalProps) => {
 export const DeleteModal = () => {
   return (
@@ -79,5 +78,5 @@ export const DeleteModal = () => {
         </Dialog>
       </Transition> */}
     </>
-  )
-}
+  );
+};

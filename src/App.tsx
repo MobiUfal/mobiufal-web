@@ -1,7 +1,7 @@
-import { BrowserRouter } from 'react-router-dom'
-import { AuthProvider } from './hooks/useAuth'
+import { BrowserRouter } from "react-router-dom";
+import { AuthProvider } from "./hooks/useAuth";
 
-import { Routes } from './Routes'
+import { Routes } from "./Routes";
 
 export function App() {
   return (
@@ -10,5 +10,5 @@ export function App() {
         <Routes />
       </BrowserRouter>
     </AuthProvider>
-  )
+  );
 }

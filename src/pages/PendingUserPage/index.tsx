@@ -83,7 +83,7 @@ export function PendingUserPage() {
       }
       if(nameFilter) {
         addOrFirst = url.includes('?') ? '&' : '?';
-        url += `${addOrFirst}name="${nameFilter.toLowerCase()}"`
+        url += `${addOrFirst}name=${nameFilter}`
       }
       console.log(url)
       loadUsers(url);

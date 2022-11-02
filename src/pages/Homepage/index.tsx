@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
+import { CustomDatePickerRange } from '../../components/FormComponents/CustomDatePickerRange';
 import { CustomInput } from '../../components/FormComponents/CustomInput';
 
 import { DropdownInput } from '../../components/FormComponents/DropdownInput';
@@ -42,6 +43,8 @@ export function Homepage() {
   const [statusFilter, setStatusFilter] = useState<string>('');
   const [requesterFilter, setRequesterFilter] = useState<string>('');
   const [voluntaryFilter, setVoluntaryFilter] = useState<string>('');
+  const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([null, null]);
+  const [startDate, endDate] = dateRange;
 
   async function loadDisplacements(url: string) {
     const response = await api.get<ResponseDto>(
@@ -77,9 +80,8 @@ export function Homepage() {
     loadDisplacements('/locomotion/');
   }, []);
 
-
   const filterData = useCallback(() => {
-    async function loadDisplacementsFiltered(originFilter: string, destinationFilter: string, statusFilter: string, requesterFilter: string, voluntaryFilter: string) {
+    async function loadDisplacementsFiltered(originFilter: string, destinationFilter: string, statusFilter: string, requesterFilter: string, voluntaryFilter: string, startDate: Date | null, endDate: Date | null) {
       let url = '/locomotion';
       let addOrFirst;
       if(originFilter && originFilter !== 'TODOS') {
@@ -95,16 +97,24 @@ export function Homepage() {
       }
       if(requesterFilter) {
         addOrFirst = url.includes('?') ? '&' : '?';
-        url += `${addOrFirst}requester="${requesterFilter.toLowerCase()}"`
+        url += `${addOrFirst}requester=${requesterFilter}`
       }
       if(voluntaryFilter) {
         addOrFirst = url.includes('?') ? '&' : '?';
-        url += `${addOrFirst}voluntary=${voluntaryFilter.toLowerCase()}`
+        url += `${addOrFirst}voluntary=${voluntaryFilter}`
+      }
+      if(startDate) {
+        addOrFirst = url.includes('?') ? '&' : '?';
+        url += `${addOrFirst}start=${startDate}`
+      }
+      if(endDate) {
+        addOrFirst = url.includes('?') ? '&' : '?';
+        url += `${addOrFirst}end=${endDate}`
       }
       loadDisplacements(url);
     }
-    loadDisplacementsFiltered(originFilter, destinationFilter, statusFilter, requesterFilter, voluntaryFilter);
-  }, [originFilter, destinationFilter, statusFilter, requesterFilter, voluntaryFilter])
+    loadDisplacementsFiltered(originFilter, destinationFilter, statusFilter, requesterFilter, voluntaryFilter, startDate, endDate);
+  }, [originFilter, destinationFilter, statusFilter, requesterFilter, voluntaryFilter, startDate, endDate])
   
   return (
     <>    
@@ -124,7 +134,7 @@ export function Homepage() {
               <div className='mb-[49px] flex align-center w-full'>
                 <div className='flex flex-col w-8/12'>
                   <div className='flex'>
-                    {/* <CustomInput placeholder='Data' value={} ={}/> */}
+                    <CustomDatePickerRange onChangeDate={setDateRange} startDate={startDate} endDate={endDate}/>
                     <DropdownInput placeholder='Origem' data={origins} value={originFilter} onChangeValue={setOriginFilter} />
                     <DropdownInput placeholder='Destino' data={destinations} value={destinationFilter} onChangeValue={setDestinationFilter} />
                   </div>

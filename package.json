@@ -2,7 +2,6 @@
   "name": "mobiufal-web",
   "private": true,
   "version": "0.0.0",
-
   "engines": {
     "node": "<=16.x.x",
     "npm": "<=8.x.x"

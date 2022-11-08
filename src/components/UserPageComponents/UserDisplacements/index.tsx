@@ -7,17 +7,17 @@ import { DropdownInput } from "../../FormComponents/DropdownInput";
 import { FilterButton } from "../../FormComponents/FilterButton";
 
 type Displacement = {
-    id: number,
-    time: string;
-    source: string;
-    destination: string;
-    requesterName: string;
-    status: string;
-}
+  id: number;
+  time: string;
+  source: string;
+  destination: string;
+  requesterName: string;
+  status: string;
+};
 
 interface UserDisplacementsProps {
-    userId: string | undefined;
-    name: string;
+  userId: string | undefined;
+  name: string;
 }
 
 export function UserDisplacements({ userId, name }: UserDisplacementsProps) {
@@ -29,37 +29,37 @@ export function UserDisplacements({ userId, name }: UserDisplacementsProps) {
     const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([null, null]);
     const [startDate, endDate] = dateRange;
 
-    async function loadData(url: string) {
-        const response = await api.get(url);
-        const { data } = response 
-        const requestedDisplacements = data.data.requested;
-      
-        const originsAux = new Set<String>();
-        const destinationsAux = new Set<String>();
-        originsAux.add('TODOS');
-        destinationsAux.add('TODOS');
-        const displacements = requestedDisplacements.map((displacement:any) => {
-          originsAux.add(displacement.origin);
-          destinationsAux.add(displacement.destination);
-          return {
-            id: displacement.id,
-            time: formatDate(displacement.time),
-            source: displacement.origin,
-            destination: displacement.destination,
-            requesterName: displacement.requester.name,
-            status: displacement.status,
-          }
-      })
-      setUserDisplacements(displacements);
-      if(!url.includes("?")) {
-        setOrigins(Array.from(originsAux));
-        setDestinations(Array.from(destinationsAux));
-      }
-    }
+  async function loadData(url: string) {
+    const response = await api.get(url);
+    const { data } = response;
+    const requestedDisplacements = data.data.requested;
 
-    useEffect(() => {
-        loadData(`/locomotion/user/${userId}`);
-    }, [])
+    const originsAux = new Set<String>();
+    const destinationsAux = new Set<String>();
+    originsAux.add("TODOS");
+    destinationsAux.add("TODOS");
+    const displacements = requestedDisplacements.map((displacement: any) => {
+      originsAux.add(displacement.origin);
+      destinationsAux.add(displacement.destination);
+      return {
+        id: displacement.id,
+        time: formatDate(displacement.time),
+        source: displacement.origin,
+        destination: displacement.destination,
+        requesterName: displacement.requester.name,
+        status: displacement.status,
+      };
+    });
+    setUserDisplacements(displacements);
+    if (!url.includes("?")) {
+      setOrigins(Array.from(originsAux));
+      setDestinations(Array.from(destinationsAux));
+    }
+  }
+
+  useEffect(() => {
+    loadData(`/locomotion/user/${userId}`);
+  }, []);
 
     const filterData = useCallback(() => {
       async function loadDisplacementsFiltered(originFilter: string, destinationFilter: string, startDate: Date | null, endDate: Date | null) {
@@ -123,5 +123,5 @@ export function UserDisplacements({ userId, name }: UserDisplacementsProps) {
                 </tbody>
               </table>
         </div>
-    )
+  );
 }

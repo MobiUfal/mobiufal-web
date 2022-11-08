@@ -1,31 +1,24 @@
-import { ReactNode, useEffect } from "react"
+import { ReactNode, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Spinner } from "../Spinner";
 
 interface PublicRoutesProps {
-    JWT: string | null;
-    children: ReactNode;
+  JWT: string | null;
+  children: ReactNode;
 }
 
 export function PublicRoute({ JWT, children }: PublicRoutesProps) {
-    const navigate = useNavigate()
+  const navigate = useNavigate();
 
-    useEffect(() => {
-        if (JWT !== null) {
-            navigate('/displacements')
-        }
-    }, [])
-
+  useEffect(() => {
     if (JWT !== null) {
-        return (
-            <Spinner />
-        )
+      navigate("/displacements");
     }
-    else {
-        return ( 
-            <>
-                { children }
-            </>
-        )
-    }
+  }, []);
+
+  if (JWT !== null) {
+    return <Spinner />;
+  } else {
+    return <>{children}</>;
+  }
 }

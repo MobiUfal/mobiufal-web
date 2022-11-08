@@ -2,11 +2,11 @@ import { useCallback, useEffect, useState } from 'react';
 import { CustomDatePickerRange } from '../../components/FormComponents/CustomDatePickerRange';
 import { CustomInput } from '../../components/FormComponents/CustomInput';
 
-import { DropdownInput } from '../../components/FormComponents/DropdownInput';
-import { FilterButton } from '../../components/FormComponents/FilterButton';
-import { api } from '../../services/api';
-import { formatDate } from '../../utils/formatDate';
-import { LocomotionStatus } from '../../utils/LocomotionStatus';
+import { DropdownInput } from "../../components/FormComponents/DropdownInput";
+import { FilterButton } from "../../components/FormComponents/FilterButton";
+import { api } from "../../services/api";
+import { formatDate } from "../../utils/formatDate";
+import { LocomotionStatus } from "../../utils/LocomotionStatus";
 
 interface DisplacementsData {
   id: number;
@@ -19,19 +19,18 @@ interface DisplacementsData {
   requester: {
     id: number;
     name: string;
-  }
+  };
   voluntary: {
     id: number;
     name: string;
-  }
+  };
 }
 
 type ResponseDto = {
   status: boolean;
   message: string;
   data: DisplacementsData[];
-}
-
+};
 
 export function Homepage() {
   const [displacements, setDisplacements] = useState<DisplacementsData[]>([]);
@@ -47,29 +46,27 @@ export function Homepage() {
   const [startDate, endDate] = dateRange;
 
   async function loadDisplacements(url: string) {
-    const response = await api.get<ResponseDto>(
-      url
-    );
-    
+    const response = await api.get<ResponseDto>(url);
+
     const { data } = response.data;
     const originsAux = new Set<String>();
     const destinationsAux = new Set<String>();
     const statusAux = new Set<String>();
-    originsAux.add('TODOS');
-    destinationsAux.add('TODOS');
-    statusAux.add('TODOS');
+    originsAux.add("TODOS");
+    destinationsAux.add("TODOS");
+    statusAux.add("TODOS");
     setDisplacements(
-      data.map(displacement  => {
-          originsAux.add(displacement.origin);
-          destinationsAux.add(displacement.destination);
-          statusAux.add(displacement.status);
+      data.map((displacement) => {
+        originsAux.add(displacement.origin);
+        destinationsAux.add(displacement.destination);
+        statusAux.add(displacement.status);
         return {
           ...displacement,
           time: formatDate(displacement.time),
         };
-      }),
+      })
     );
-    if(url === '/locomotion/') {
+    if (url === "/locomotion/") {
       setOrigins(Array.from(originsAux));
       setDestinations(Array.from(destinationsAux));
       setStatus(Array.from(statusAux));
@@ -77,23 +74,23 @@ export function Homepage() {
   }
 
   useEffect(() => {
-    loadDisplacements('/locomotion/');
+    loadDisplacements("/locomotion/");
   }, []);
 
   const filterData = useCallback(() => {
     async function loadDisplacementsFiltered(originFilter: string, destinationFilter: string, statusFilter: string, requesterFilter: string, voluntaryFilter: string, startDate: Date | null, endDate: Date | null) {
       let url = '/locomotion';
       let addOrFirst;
-      if(originFilter && originFilter !== 'TODOS') {
-        url += `?origin=${originFilter.toLowerCase()}`
+      if (originFilter && originFilter !== "TODOS") {
+        url += `?origin=${originFilter.toLowerCase()}`;
       }
-      if(destinationFilter  && destinationFilter !== 'TODOS') {
-        addOrFirst = url.includes('?') ? '&' : '?';
-        url += `${addOrFirst}destination=${destinationFilter.toLowerCase()}`
+      if (destinationFilter && destinationFilter !== "TODOS") {
+        addOrFirst = url.includes("?") ? "&" : "?";
+        url += `${addOrFirst}destination=${destinationFilter.toLowerCase()}`;
       }
-      if(statusFilter  && statusFilter !== 'TODOS') {
-        addOrFirst = url.includes('?') ? '&' : '?';
-        url += `${addOrFirst}status=${statusFilter.toLowerCase()}`
+      if (statusFilter && statusFilter !== "TODOS") {
+        addOrFirst = url.includes("?") ? "&" : "?";
+        url += `${addOrFirst}status=${statusFilter.toLowerCase()}`;
       }
       if(requesterFilter) {
         addOrFirst = url.includes('?') ? '&' : '?';
@@ -120,12 +117,9 @@ export function Homepage() {
     <>    
       <div className="h-full w-full">
         <div className="container mx-auto md:container md:mx-auto py-[91px] px-[67px]">
-
           <div className="h-full border-solid border-2 border-[#000000]-600 rounded-[15px] bg-[#FFFCF9]">
-            
             <div className="ml-[32px] mt-[31px] flex flex-col">
               <h1 className='text-black mt-[31px] lg:text-[48px] sm:text-[28px] '>Últimos deslocamentos</h1>
-              
               <span className='text-[#000000]/60 mt-[12px]'>Acompanhe em tempo real tudo o que está acontecendo</span>
             </div>
 

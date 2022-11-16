@@ -29,7 +29,7 @@ export function Routes() {
       />
 
       <Route
-        path={"/displacements"}
+        path={"/deslocamentos"}
         element={
           <PrivateRoute JWT={JWT}>
             <Homepage />
@@ -38,7 +38,7 @@ export function Routes() {
       />
 
       <Route
-        path={"/users"}
+        path={"/usuarios"}
         element={
           <PrivateRoute JWT={JWT}>
             <PendingUserPage />
@@ -47,7 +47,7 @@ export function Routes() {
       />
 
       <Route
-        path={"/users/:id"}
+        path={"/usuarios/:id"}
         element={
           <PrivateRoute JWT={JWT}>
             <User />
@@ -56,7 +56,7 @@ export function Routes() {
       />
 
       <Route
-        path={"/configurations"}
+        path={"/configuracoes"}
         element={
           <PrivateRoute JWT={JWT}>
             <Configurations />

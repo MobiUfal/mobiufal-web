@@ -6,7 +6,7 @@ import { DropdownInput } from "../../components/FormComponents/DropdownInput";
 import { FilterButton } from "../../components/FormComponents/FilterButton";
 import { api } from "../../services/api";
 import { formatDate } from "../../utils/formatDate";
-import { LocomotionStatus } from "../../utils/LocomotionStatus";
+import { getLocomotionStatusKeyByValue, getLocomotionStatusValueByKey } from "../../utils/LocomotionStatus";
 
 interface DisplacementsData {
   id: number;
@@ -52,14 +52,14 @@ export function Homepage() {
     const originsAux = new Set<String>();
     const destinationsAux = new Set<String>();
     const statusAux = new Set<String>();
-    originsAux.add("TODOS");
-    destinationsAux.add("TODOS");
-    statusAux.add("TODOS");
+    originsAux.add("Todos");
+    destinationsAux.add("Todos");
+    statusAux.add("Todos");
     setDisplacements(
       data.map((displacement) => {
         originsAux.add(displacement.origin);
         destinationsAux.add(displacement.destination);
-        statusAux.add(displacement.status);
+        statusAux.add(getLocomotionStatusValueByKey(displacement.status));
         return {
           ...displacement,
           time: formatDate(displacement.time),
@@ -81,16 +81,16 @@ export function Homepage() {
     async function loadDisplacementsFiltered(originFilter: string, destinationFilter: string, statusFilter: string, requesterFilter: string, voluntaryFilter: string, startDate: Date | null, endDate: Date | null) {
       let url = '/locomotion';
       let addOrFirst;
-      if (originFilter && originFilter !== "TODOS") {
+      if (originFilter && originFilter !== "Todos") {
         url += `?origin=${originFilter.toLowerCase()}`;
       }
-      if (destinationFilter && destinationFilter !== "TODOS") {
+      if (destinationFilter && destinationFilter !== "Todos") {
         addOrFirst = url.includes("?") ? "&" : "?";
         url += `${addOrFirst}destination=${destinationFilter.toLowerCase()}`;
       }
-      if (statusFilter && statusFilter !== "TODOS") {
+      if (statusFilter && statusFilter !== "Todos") {
         addOrFirst = url.includes("?") ? "&" : "?";
-        url += `${addOrFirst}status=${statusFilter.toLowerCase()}`;
+        url += `${addOrFirst}status=${getLocomotionStatusKeyByValue(statusFilter)}`;
       }
       if(requesterFilter) {
         addOrFirst = url.includes('?') ? '&' : '?';
@@ -163,11 +163,14 @@ export function Homepage() {
                       <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">{displacement.destination}</td>
                       <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">{displacement.requester.name}</td>
                       <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">{displacement.voluntary ? displacement.voluntary.name : "Procurando..."}</td>
-                      <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">{LocomotionStatus[displacement.status as keyof typeof LocomotionStatus]}</td>
+                      <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">{getLocomotionStatusValueByKey(displacement.status)}</td>
                     </tr>
                 )))}                
                 </tbody>
               </table>
+              {displacements.length === 0 && 
+                <div className="bg-[#fff] border border-[#B9B9B9] text-black flex justify-center items-center py-4">Não possui nenhum deslocamento ainda!</div>
+              }
             </div>
           </div>
         </div>

@@ -63,7 +63,7 @@ export default function LoginForm() {
         }
       );
 
-      navigate("/displacements");
+      navigate("/deslocamentos");
     } catch (err: any | AxiosError | Yup.ValidationError) {
       if (axios.isAxiosError(err)) {
         console.log(err.message);

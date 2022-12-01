@@ -2,7 +2,6 @@ import { BsHouseDoorFill } from "react-icons/bs";
 import { FaUserCircle } from "react-icons/fa";
 import { IoSettingsSharp } from "react-icons/io5";
 import { SectionPage } from "./SectionPage";
-import { SubsectionPage } from "./SubsectionPage";
 
 interface SidebarProps {
   isSidebarOpened: boolean;
@@ -11,7 +10,7 @@ interface SidebarProps {
 export function Sidebar({ isSidebarOpened }: SidebarProps) {
   return (
     <aside
-      className={`fixed  overflow-hidden  z-[1] py-[110px] translate-y-[-12px] h-[100%] bg-[#373737] rounded-br-xl ease-in-out duration-300 ${
+      className={`fixed  overflow-hidden top-16  z-[1] pt-[13px] translate-y-[-12px] h-full flex flex-col bg-[#373737] rounded-br-xl ease-in-out duration-300 ${
         isSidebarOpened ? "w-[260px]" : "w-0"
       }`}  
     >

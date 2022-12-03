@@ -118,7 +118,7 @@ export function UserDisplacements({ userId, name }: UserDisplacementsProps) {
 								<td className="border border-[#B9B9B9] px-6 py-4 w-3/12 whitespace-nowrap text-sm font-medium text-gray-500">{displacement.source}</td>
 								<td className="border border-[#B9B9B9] px-6 py-4 w-3/12 whitespace-nowrap text-sm font-medium text-gray-500">{displacement.destination}</td>
 								<td className="border border-[#B9B9B9] px-6 py-4 w-3/12 whitespace-nowrap text-sm font-medium text-gray-500">{displacement.requesterName}</td>
-								<td className="border border-[#B9B9B9] px-6 py-4 w-3/12 whitespace-nowrap text-sm font-medium text-gray-500">{getLocomotionStatusValueByKey(displacement.status)}</td>
+								<td className="border border-[#B9B9B9] px-6 py-4 w-3/12 whitespace-nowrap text-sm font-medium text-gray-500">{displacement.status}</td>
 							</tr>
 						)))}                
 					</tbody>

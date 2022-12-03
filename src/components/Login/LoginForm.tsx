@@ -51,10 +51,11 @@ export default function LoginForm() {
         email,
         password,
       });
-
-      const JWT = response.data.data.token;
-      login(JWT);
-
+      
+      if(!response.data.success) {
+        throw new Error(response.data.message);
+      }
+      
       toast.success(
         "Login realizado com sucesso. Você será redirecionado para a página principal",
         {
@@ -62,17 +63,20 @@ export default function LoginForm() {
           autoClose: 2500,
         }
       );
-
-      navigate("/deslocamentos");
+      const JWT = response.data.data.token;
+      login(JWT);
+      navigate("/displacements");
     } catch (err: any | AxiosError | Yup.ValidationError) {
       if (axios.isAxiosError(err)) {
-        console.log(err.message);
+        const errorMessage =  err?.response?.status === 401 ? 'CPF e/ou senha incorreto(s).' : 'Tente novamente'
+        toast.error('Ocorreu um erro ao fazer o login na plataforma, ' + errorMessage, {
+          position: 'top-right',
+          autoClose: 2500,
+        });
       } else {
-        console.log(err);
 
         if (err instanceof Yup.ValidationError) {
           const errorsFromYup = getValidationErrors(err);
-
           toast.error("Erro ao realizar login, por favor tente novamente.", {
             position: toast.POSITION.TOP_RIGHT,
             autoClose: 2500,
@@ -85,11 +89,11 @@ export default function LoginForm() {
               setPasswordValidation(value);
             }
           });
-
           setIsLoading(false);
           return;
         }
       }
+      setIsLoading(false);
     }
   }
 

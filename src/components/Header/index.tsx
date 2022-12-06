@@ -16,7 +16,7 @@ export function Header({ isSidebarOpened, openSidebar }: HeaderProps) {
             isSidebarOpened={isSidebarOpened}
             openSidebar={openSidebar}
           />
-          <Logo />
+          <a href="/deslocamentos"><Logo /></a>
         </div>
 
         <Logout />

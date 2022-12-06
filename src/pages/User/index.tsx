@@ -6,6 +6,9 @@ import { UserApprovalButtons } from "../../components/UserPageComponents/UserApp
 import { UserDisplacements } from "../../components/UserPageComponents/UserDisplacements";
 import { UserInfo } from "../../components/UserPageComponents/UserInfo";
 import { api } from "../../services/api";
+import { getUserAffiliationsValueByKey } from "../../utils/UserAffiliations";
+import { getUserRolesValueByKey } from "../../utils/UserRoles";
+import { getUserStatusValueByKey } from "../../utils/UserStatus";
 
 type UserInfo = {
   name: string;
@@ -21,19 +24,6 @@ type UserInfo = {
   affiliation: string;
 };
 
-const approvedDict = {
-  PENDING: "Aguardando Aprovação",
-  APROVED: "Ativo",
-  // TODO -> CHECK BLOCKED
-  BLOCKED: "Bloqueado",
-};
-
-const rolesDict = {
-  VOLUNTARY: "Voluntário",
-  ADMIN: "Administrador",
-  // TODO -> REQUESTER
-};
-
 export function User() {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -47,7 +37,7 @@ export function User() {
       position: toast.POSITION.TOP_RIGHT,
     });
 
-    navigate("/users"); // redirect to users page
+    navigate("/usuarios"); // redirect to users page
   }
 
   useEffect(() => {
@@ -67,7 +57,7 @@ export function User() {
           deficiency: data.data?.deficiency,
           course_sector: data.data?.course_sector,
           approved: data.data.aproved,
-          affiliation: data.data.affiliation,
+          affiliation: getUserAffiliationsValueByKey(data.data.affiliation),
         };
 
         setUser(user);
@@ -91,8 +81,8 @@ export function User() {
                 Informações de {user.name}
               </h1>
               <h1 className="text-2xl font-normal leading-7 text-black">
-                {rolesDict[user.role as keyof typeof rolesDict]} (
-                {approvedDict[user.approved as keyof typeof approvedDict]})
+                {getUserRolesValueByKey(user.role)} (
+                {getUserStatusValueByKey(user.approved)})
               </h1>
             </div>
 

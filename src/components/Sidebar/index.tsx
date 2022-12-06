@@ -18,19 +18,19 @@ export function Sidebar({ isSidebarOpened }: SidebarProps) {
         <SectionPage
           sectionName="Página Inicial"
           Icon={BsHouseDoorFill}
-          sectionLink="/displacements"
+          sectionLink="/deslocamentos"
         />
 
         <SectionPage
           sectionName="Gerenciar Usuários"
           Icon={FaUserCircle}
-          sectionLink="/users"
+          sectionLink="/usuarios"
         />
 
         <SectionPage
           sectionName="Configurações"
           Icon={IoSettingsSharp}
-          sectionLink="/configurations"
+          sectionLink="/configuracoes"
         />
       </nav>
     </aside>

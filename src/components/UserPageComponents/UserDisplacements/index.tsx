@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { api } from "../../../services/api";
 import { formatDate } from "../../../utils/formatDate";
-import { LocomotionStatus } from "../../../utils/LocomotionStatus";
+import { getLocomotionStatusValueByKey } from "../../../utils/LocomotionStatus";
 import { CustomDatePickerRange } from "../../FormComponents/CustomDatePickerRange";
 import { DropdownInput } from "../../FormComponents/DropdownInput";
 import { FilterButton } from "../../FormComponents/FilterButton";
@@ -36,8 +36,8 @@ export function UserDisplacements({ userId, name }: UserDisplacementsProps) {
 
     const originsAux = new Set<String>();
     const destinationsAux = new Set<String>();
-    originsAux.add("TODOS");
-    destinationsAux.add("TODOS");
+    originsAux.add("Todos");
+    destinationsAux.add("Todos");
     const displacements = requestedDisplacements.map((displacement: any) => {
       originsAux.add(displacement.origin);
       destinationsAux.add(displacement.destination);
@@ -47,7 +47,7 @@ export function UserDisplacements({ userId, name }: UserDisplacementsProps) {
         source: displacement.origin,
         destination: displacement.destination,
         requesterName: displacement.requester.name,
-        status: displacement.status,
+        status: getLocomotionStatusValueByKey(displacement.status),
       };
     });
     setUserDisplacements(displacements);
@@ -65,10 +65,10 @@ export function UserDisplacements({ userId, name }: UserDisplacementsProps) {
       async function loadDisplacementsFiltered(originFilter: string, destinationFilter: string, startDate: Date | null, endDate: Date | null) {
         let url = `/locomotion/user/${userId}`;
         let addOrFirst;
-        if(originFilter && originFilter !== 'TODOS') {
+        if(originFilter && originFilter !== 'Todos') {
           url += `?origin=${originFilter.toLowerCase()}`
         }
-        if(destinationFilter  && destinationFilter !== 'TODOS') {
+        if(destinationFilter  && destinationFilter !== 'Todos') {
           addOrFirst = url.includes('?') ? '&' : '?';
           url += `${addOrFirst}destination=${destinationFilter.toLowerCase()}`
         }
@@ -99,29 +99,34 @@ export function UserDisplacements({ userId, name }: UserDisplacementsProps) {
                   <FilterButton onClickValue={filterData}/>
                 </div>
               </div>
-
-            <table className='table-auto block max-h-80 overflow-y-scroll text-center border-collapse border border-[#B9B9B9] bg-[#fff]'>
-                <thead className='bg-[#000000]/5 text-black'>
-                  <tr>
-                    <th className="border border-[#B9B9B9] px-4 py-2 w-3/12">Horário</th>
-                    <th className="border border-[#B9B9B9] px-4 py-2 w-3/12">Origem</th>
-                    <th className="border border-[#B9B9B9] px-4 py-2 w-3/12">Destino</th>
-                    <th className="border border-[#B9B9B9] px-4 py-2 w-3/12">Solicitante</th>
-                    <th className="border border-[#B9B9B9] px-4 py-2 w-3/12">Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                    {userDisplacements.length !== 0 && (userDisplacements.map(displacement => (
-                        <tr key={displacement.id} className="border border-black">
-                            <td className="border border-[#B9B9B9] px-6 py-4 w-3/12 whitespace-nowrap text-sm font-medium text-gray-500">{displacement.time}</td>
-                            <td className="border border-[#B9B9B9] px-6 py-4 w-3/12 whitespace-nowrap text-sm font-medium text-gray-500">{displacement.source}</td>
-                            <td className="border border-[#B9B9B9] px-6 py-4 w-3/12 whitespace-nowrap text-sm font-medium text-gray-500">{displacement.destination}</td>
-                            <td className="border border-[#B9B9B9] px-6 py-4 w-3/12 whitespace-nowrap text-sm font-medium text-gray-500">{displacement.requesterName}</td>
-                            <td className="border border-[#B9B9B9] px-6 py-4 w-3/12 whitespace-nowrap text-sm font-medium text-gray-500">{LocomotionStatus[displacement.status as keyof typeof LocomotionStatus]}</td>
-                        </tr>
-                    )))}                
-                </tbody>
-              </table>
+			
+			<div>
+				<table className='table-auto block max-h-80 overflow-y-scroll text-center border-collapse border border-[#B9B9B9] bg-[#fff]'>
+					<thead className='bg-[#000000]/5 text-black'>
+					<tr>
+						<th className="border border-[#B9B9B9] px-4 py-2 w-3/12">Horário</th>
+						<th className="border border-[#B9B9B9] px-4 py-2 w-3/12">Origem</th>
+						<th className="border border-[#B9B9B9] px-4 py-2 w-3/12">Destino</th>
+						<th className="border border-[#B9B9B9] px-4 py-2 w-3/12">Solicitante</th>
+						<th className="border border-[#B9B9B9] px-4 py-2 w-3/12">Status</th>
+					</tr>
+					</thead>
+					<tbody>
+						{userDisplacements.length !== 0 && (userDisplacements.map(displacement => (
+							<tr key={displacement.id} className="border border-black">
+								<td className="border border-[#B9B9B9] px-6 py-4 w-3/12 whitespace-nowrap text-sm font-medium text-gray-500">{displacement.time}</td>
+								<td className="border border-[#B9B9B9] px-6 py-4 w-3/12 whitespace-nowrap text-sm font-medium text-gray-500">{displacement.source}</td>
+								<td className="border border-[#B9B9B9] px-6 py-4 w-3/12 whitespace-nowrap text-sm font-medium text-gray-500">{displacement.destination}</td>
+								<td className="border border-[#B9B9B9] px-6 py-4 w-3/12 whitespace-nowrap text-sm font-medium text-gray-500">{displacement.requesterName}</td>
+								<td className="border border-[#B9B9B9] px-6 py-4 w-3/12 whitespace-nowrap text-sm font-medium text-gray-500">{displacement.status}</td>
+							</tr>
+						)))}                
+					</tbody>
+				</table>
+				{userDisplacements.length === 0 && 
+					<div className="bg-[#fff] border border-[#B9B9B9] text-black flex justify-center items-center py-4">Não possui nenhum deslocamento ainda!</div>
+				}
+			</div>
         </div>
   );
 }

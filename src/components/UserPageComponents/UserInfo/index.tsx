@@ -79,7 +79,7 @@ export function UserInfo({
             id="affiliation"
           />
           <CustomInput
-            label="Curso/Setor"
+            label="Unidade/Prédio"
             disabled
             value={course_sector}
             id="course_sector"

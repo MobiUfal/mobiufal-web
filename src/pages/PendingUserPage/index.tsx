@@ -8,8 +8,8 @@ import { CustomInput } from "../../components/FormComponents/CustomInput";
 import { DropdownInput } from "../../components/FormComponents/DropdownInput";
 import { FilterButton } from "../../components/FormComponents/FilterButton";
 import { BsFillEyeFill } from "react-icons/bs";
-import { UserStatus } from "../../utils/UserStatus";
-import { UserRoles } from "../../utils/UserRoles";
+import { getUserStatusKeyByValue, getUserStatusValueByKey, UserStatus } from "../../utils/UserStatus";
+import { getUserRolesKeyByValue, getUserRolesValueByKey, UserRoles } from "../../utils/UserRoles";
 
 type UserTransiction = {
   id: number;
@@ -41,12 +41,12 @@ export function PendingUserPage() {
     console.log(rawUsers);
     const roleAux = new Set<String>();
     const statusAux = new Set<String>();
-    statusAux.add("TODOS");
-    roleAux.add("TODOS");
+    statusAux.add("Todos");
+    roleAux.add("Todos");
 
     const users: User[] = rawUsers.map((user) => {
-      statusAux.add(user.aproved);
-      roleAux.add(user.role);
+      statusAux.add(getUserStatusValueByKey(user.aproved));
+      roleAux.add(getUserRolesValueByKey(user.role));
       return {
         id: user.id,
         name: user.name,
@@ -74,12 +74,12 @@ export function PendingUserPage() {
     ) {
       let url = "/user";
       let addOrFirst;
-      if (statusFilter && statusFilter !== "TODOS") {
-        url += `?aproved=${statusFilter.toLowerCase()}`;
+      if (statusFilter && statusFilter !== "Todos") {
+        url += `?aproved=${getUserStatusKeyByValue(statusFilter)}`;
       }
-      if (typeFilter && typeFilter !== "TODOS") {
+      if (typeFilter && typeFilter !== "Todos") {
         addOrFirst = url.includes("?") ? "&" : "?";
-        url += `${addOrFirst}role=${typeFilter.toLowerCase()}`;
+        url += `${addOrFirst}role=${getUserRolesKeyByValue(typeFilter)}`;
       }
       if(nameFilter) {
         addOrFirst = url.includes('?') ? '&' : '?';
@@ -163,7 +163,7 @@ export function PendingUserPage() {
                         </td>
                         <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">
                           <a
-                            href={`users/${user.id}`}
+                            href={`usuarios/${user.id}`}
                             className="flex justify-center"
                           >
                             <BsFillEyeFill size={24} color={"#29AAD7"} />
@@ -173,6 +173,9 @@ export function PendingUserPage() {
                     ))}
                 </tbody>
               </table>
+              {users.length === 0 && 
+                <div className="bg-[#fff] border border-[#B9B9B9] text-black flex justify-center items-center py-4">Não possui nenhum usuário ainda!</div>
+              }
             </div>
           </div>
         </div>

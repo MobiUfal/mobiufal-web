@@ -71,8 +71,20 @@ export function User() {
     loadData();
   }, [updateUser]);
 
+  const goUsers = () => {
+    navigate("/usuarios");
+  };
+
   return (
-    <div className="h-full w-full">
+    <div className="h-full w-full flex flex-col">
+      <div>
+        <button
+          onClick={goUsers}
+          className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-3 px-5 rounded ml-20 mt-20"
+        >
+          Voltar
+        </button>
+      </div>
       <div className="relative max-w-[1068px] h-5/6 mx-auto my-12 rounded-xl bg-[#FFFCF9] border-solid border-2 border-[#000000]-600 pt-5 pb-8 px-10">
         {user.name != null ? (
           <>

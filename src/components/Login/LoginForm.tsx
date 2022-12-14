@@ -130,7 +130,7 @@ export default function LoginForm() {
         functionOnClick={(event) => handleLogin(event)}
         text="Login"
         isLoading={isLoading}
-        aditionalStyleClasses="font-medium text-2xl leading-5 bg-[#F93633] w-3/4 max-w-[336px] mx-auto py-[18px]"
+        aditionalStyleClasses="font-medium text-2xl leading-5 bg-[#F93633] mx-auto py-[18px]"
       />
     </form>
   );

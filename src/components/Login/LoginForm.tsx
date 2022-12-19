@@ -68,7 +68,7 @@ export default function LoginForm() {
       navigate("/deslocamentos");
     } catch (err: any | AxiosError | Yup.ValidationError) {
       if (axios.isAxiosError(err)) {
-        const errorMessage =  err?.response?.status === 401 ? 'CPF e/ou senha incorreto(s).' : 'Tente novamente'
+        const errorMessage =  err?.response?.status === 401 ? 'e-mail e/ou senha incorreto(s).' : 'Tente novamente'
         toast.error('Ocorreu um erro ao fazer o login na plataforma, ' + errorMessage, {
           position: 'top-right',
           autoClose: 2500,

@@ -9,6 +9,8 @@ import { FilterButton } from "../../FormComponents/FilterButton";
 type Displacement = {
   id: number;
   time: string;
+  accepted_at: string;
+  finished_at: string;
   source: string;
   destination: string;
   requesterName: string;
@@ -48,6 +50,8 @@ export function UserDisplacements({ userId, name }: UserDisplacementsProps) {
         destination: displacement.destination,
         requesterName: displacement.requester.name,
         status: getLocomotionStatusValueByKey(displacement.status),
+        accepted_at: formatDate(displacement.accepted_at).split(' ').splice(1).toString(),
+        finished_at: formatDate(displacement.finished_at).split(' ').splice(1).toString(),
       };
     });
     setUserDisplacements(displacements);
@@ -109,6 +113,8 @@ export function UserDisplacements({ userId, name }: UserDisplacementsProps) {
 						<th className="border border-[#B9B9B9] px-4 py-2 w-3/12">Destino</th>
 						<th className="border border-[#B9B9B9] px-4 py-2 w-3/12">Solicitante</th>
 						<th className="border border-[#B9B9B9] px-4 py-2 w-3/12">Status</th>
+						<th className="border border-[#B9B9B9] px-4 py-2 w-3/12">Aceito</th>
+						<th className="border border-[#B9B9B9] px-4 py-2 w-3/12">Finalizado</th>
 					</tr>
 					</thead>
 					<tbody>
@@ -119,6 +125,8 @@ export function UserDisplacements({ userId, name }: UserDisplacementsProps) {
 								<td className="border border-[#B9B9B9] px-6 py-4 w-3/12 whitespace-nowrap text-sm font-medium text-gray-500">{displacement.destination}</td>
 								<td className="border border-[#B9B9B9] px-6 py-4 w-3/12 whitespace-nowrap text-sm font-medium text-gray-500">{displacement.requesterName}</td>
 								<td className="border border-[#B9B9B9] px-6 py-4 w-3/12 whitespace-nowrap text-sm font-medium text-gray-500">{displacement.status}</td>
+								<td className="border border-[#B9B9B9] px-6 py-4 w-3/12 whitespace-nowrap text-sm font-medium text-gray-500">{displacement.accepted_at}</td>
+								<td className="border border-[#B9B9B9] px-6 py-4 w-3/12 whitespace-nowrap text-sm font-medium text-gray-500">{displacement.finished_at}</td>
 							</tr>
 						)))}                
 					</tbody>

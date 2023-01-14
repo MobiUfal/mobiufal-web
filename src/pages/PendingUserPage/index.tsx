@@ -8,8 +8,16 @@ import { CustomInput } from "../../components/FormComponents/CustomInput";
 import { DropdownInput } from "../../components/FormComponents/DropdownInput";
 import { FilterButton } from "../../components/FormComponents/FilterButton";
 import { BsFillEyeFill } from "react-icons/bs";
-import { getUserStatusKeyByValue, getUserStatusValueByKey, UserStatus } from "../../utils/UserStatus";
-import { getUserRolesKeyByValue, getUserRolesValueByKey, UserRoles } from "../../utils/UserRoles";
+import {
+  getUserStatusKeyByValue,
+  getUserStatusValueByKey,
+  UserStatus,
+} from "../../utils/UserStatus";
+import {
+  getUserRolesKeyByValue,
+  getUserRolesValueByKey,
+  UserRoles,
+} from "../../utils/UserRoles";
 
 type UserTransiction = {
   id: number;
@@ -33,6 +41,7 @@ export function PendingUserPage() {
   let [typeFilter, setTypeFilter] = useState<string>("");
 
   const [users, setUsers] = useState<User[]>([]);
+  const [fixedUsers, setFixedUsers] = useState<User[]>([]);
 
   async function loadUsers(url: string) {
     const response = await api.get(url);
@@ -56,6 +65,7 @@ export function PendingUserPage() {
     });
 
     setUsers(users);
+    setFixedUsers(users);
     if (url === "/user/") {
       setStatusAux(Array.from(statusAux));
       setRoleAux(Array.from(roleAux));
@@ -81,10 +91,9 @@ export function PendingUserPage() {
         addOrFirst = url.includes("?") ? "&" : "?";
         url += `${addOrFirst}role=${getUserRolesKeyByValue(typeFilter)}`;
       }
-      if(nameFilter) {
-        addOrFirst = url.includes('?') ? '&' : '?';
-        url += `${addOrFirst}name=${nameFilter}`
-
+      if (nameFilter) {
+        addOrFirst = url.includes("?") ? "&" : "?";
+        url += `${addOrFirst}name=${nameFilter}`;
       }
       console.log(url);
       loadUsers(url);
@@ -92,6 +101,26 @@ export function PendingUserPage() {
     loadUserFiltered(statusFilter, nameFilter, typeFilter);
   }, [statusFilter, nameFilter, typeFilter]);
 
+  const onSearch = (value: string, typeInput: string) => {
+    const currValue = value;
+
+    const dadosFiltrados = fixedUsers.filter((entry) => {
+      // coloca strings em caixa baixa e remove acentos
+      let record = entry.name
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "");
+
+      let term = currValue
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "");
+
+      return record.includes(term);
+    });
+
+    setUsers(dadosFiltrados); // ou atribuir os dados que a tabela usa pra esses filtrados
+  };
   return (
     <>
       <div className="h-full w-full">
@@ -112,6 +141,8 @@ export function PendingUserPage() {
                         placeholder="Nome"
                         value={nameFilter}
                         onChangeText={setNameFilter}
+                        onSearch={onSearch}
+                        inputType="userName"
                       />
                       <DropdownInput
                         placeholder="Tipo"
@@ -173,9 +204,11 @@ export function PendingUserPage() {
                     ))}
                 </tbody>
               </table>
-              {users.length === 0 && 
-                <div className="bg-[#fff] border border-[#B9B9B9] text-black flex justify-center items-center py-4">Não possui nenhum usuário ainda!</div>
-              }
+              {users.length === 0 && (
+                <div className="bg-[#fff] border border-[#B9B9B9] text-black flex justify-center items-center py-4">
+                  Não possui nenhum usuário ainda!
+                </div>
+              )}
             </div>
           </div>
         </div>

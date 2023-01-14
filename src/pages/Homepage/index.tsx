@@ -1,12 +1,15 @@
-import { useCallback, useEffect, useState } from 'react';
-import { CustomDatePickerRange } from '../../components/FormComponents/CustomDatePickerRange';
-import { CustomInput } from '../../components/FormComponents/CustomInput';
+import { useCallback, useEffect, useState } from "react";
+import { CustomDatePickerRange } from "../../components/FormComponents/CustomDatePickerRange";
+import { CustomInput } from "../../components/FormComponents/CustomInput";
 
 import { DropdownInput } from "../../components/FormComponents/DropdownInput";
 import { FilterButton } from "../../components/FormComponents/FilterButton";
 import { api } from "../../services/api";
 import { formatDate } from "../../utils/formatDate";
-import { getLocomotionStatusKeyByValue, getLocomotionStatusValueByKey } from "../../utils/LocomotionStatus";
+import {
+  getLocomotionStatusKeyByValue,
+  getLocomotionStatusValueByKey,
+} from "../../utils/LocomotionStatus";
 
 interface DisplacementsData {
   id: number;
@@ -34,15 +37,21 @@ type ResponseDto = {
 
 export function Homepage() {
   const [displacements, setDisplacements] = useState<DisplacementsData[]>([]);
+  const [fixedDisplacements, setFixedDisplacements] = useState<
+    DisplacementsData[]
+  >([]);
   const [origins, setOrigins] = useState<String[]>([]);
   const [destinations, setDestinations] = useState<String[]>([]);
   const [status, setStatus] = useState<String[]>([]);
-  const [destinationFilter, setDestinationFilter] = useState<string>('');
-  const [originFilter, setOriginFilter] = useState<string>('');
-  const [statusFilter, setStatusFilter] = useState<string>('');
-  const [requesterFilter, setRequesterFilter] = useState<string>('');
-  const [voluntaryFilter, setVoluntaryFilter] = useState<string>('');
-  const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([null, null]);
+  const [destinationFilter, setDestinationFilter] = useState<string>("");
+  const [originFilter, setOriginFilter] = useState<string>("");
+  const [statusFilter, setStatusFilter] = useState<string>("");
+  const [requesterFilter, setRequesterFilter] = useState<string>("");
+  const [voluntaryFilter, setVoluntaryFilter] = useState<string>("");
+  const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([
+    null,
+    null,
+  ]);
   const [startDate, endDate] = dateRange;
 
   async function loadDisplacements(url: string) {
@@ -66,11 +75,23 @@ export function Homepage() {
         };
       })
     );
+    setFixedDisplacements(
+      data.map((displacement) => {
+        originsAux.add(displacement.origin);
+        destinationsAux.add(displacement.destination);
+        statusAux.add(getLocomotionStatusValueByKey(displacement.status));
+        return {
+          ...displacement,
+          time: formatDate(displacement.time),
+        };
+      })
+    );
     if (url === "/locomotion/") {
       setOrigins(Array.from(originsAux));
       setDestinations(Array.from(destinationsAux));
       setStatus(Array.from(statusAux));
     }
+    console.log(displacements);
   }
 
   useEffect(() => {
@@ -78,8 +99,16 @@ export function Homepage() {
   }, []);
 
   const filterData = useCallback(() => {
-    async function loadDisplacementsFiltered(originFilter: string, destinationFilter: string, statusFilter: string, requesterFilter: string, voluntaryFilter: string, startDate: Date | null, endDate: Date | null) {
-      let url = '/locomotion';
+    async function loadDisplacementsFiltered(
+      originFilter: string,
+      destinationFilter: string,
+      statusFilter: string,
+      requesterFilter: string,
+      voluntaryFilter: string,
+      startDate: Date | null,
+      endDate: Date | null
+    ) {
+      let url = "/locomotion";
       let addOrFirst;
       if (originFilter && originFilter !== "Todos") {
         url += `?origin=${originFilter.toLowerCase()}`;
@@ -90,91 +119,208 @@ export function Homepage() {
       }
       if (statusFilter && statusFilter !== "Todos") {
         addOrFirst = url.includes("?") ? "&" : "?";
-        url += `${addOrFirst}status=${getLocomotionStatusKeyByValue(statusFilter)}`;
+        url += `${addOrFirst}status=${getLocomotionStatusKeyByValue(
+          statusFilter
+        )}`;
       }
-      if(requesterFilter) {
-        addOrFirst = url.includes('?') ? '&' : '?';
-        url += `${addOrFirst}requester=${requesterFilter}`
+      if (requesterFilter) {
+        addOrFirst = url.includes("?") ? "&" : "?";
+        url += `${addOrFirst}requester=${requesterFilter}`;
       }
-      if(voluntaryFilter) {
-        addOrFirst = url.includes('?') ? '&' : '?';
-        url += `${addOrFirst}voluntary=${voluntaryFilter}`
+      if (voluntaryFilter) {
+        addOrFirst = url.includes("?") ? "&" : "?";
+        url += `${addOrFirst}voluntary=${voluntaryFilter}`;
       }
-      if(startDate) {
-        addOrFirst = url.includes('?') ? '&' : '?';
-        url += `${addOrFirst}start=${startDate}`
+      if (startDate) {
+        addOrFirst = url.includes("?") ? "&" : "?";
+        url += `${addOrFirst}start=${startDate}`;
       }
-      if(endDate) {
-        addOrFirst = url.includes('?') ? '&' : '?';
-        url += `${addOrFirst}end=${endDate}`
+      if (endDate) {
+        addOrFirst = url.includes("?") ? "&" : "?";
+        url += `${addOrFirst}end=${endDate}`;
       }
       loadDisplacements(url);
     }
-    loadDisplacementsFiltered(originFilter, destinationFilter, statusFilter, requesterFilter, voluntaryFilter, startDate, endDate);
-  }, [originFilter, destinationFilter, statusFilter, requesterFilter, voluntaryFilter, startDate, endDate])
-  
+    loadDisplacementsFiltered(
+      originFilter,
+      destinationFilter,
+      statusFilter,
+      requesterFilter,
+      voluntaryFilter,
+      startDate,
+      endDate
+    );
+  }, [
+    originFilter,
+    destinationFilter,
+    statusFilter,
+    requesterFilter,
+    voluntaryFilter,
+    startDate,
+    endDate,
+  ]);
+
+  const onSearch = (value: string, typeInput: string) => {
+    if (value == "") {
+      setDisplacements(fixedDisplacements);
+      return;
+    }
+    const currValue = value;
+
+    const dadosFiltrados = fixedDisplacements.filter((entry) => {
+      let record = entry.requester.name
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "");
+
+      if (typeInput === "voluntary" && entry.voluntary !== null) {
+        record = entry.voluntary.name
+          .toLowerCase()
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "");
+      }
+
+      let term = currValue
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "");
+
+      if (typeInput == "voluntary" && entry.voluntary !== null) {
+        return record.includes(term);
+      } else if (typeInput == "voluntary" && entry.voluntary === null) {
+        return;
+      } else {
+        return record.includes(term);
+      }
+    });
+
+    setDisplacements(dadosFiltrados);
+  };
+
   return (
-    <>    
+    <>
       <div className="h-full w-full">
         <div className="container mx-auto md:container md:mx-auto py-[91px] px-[67px]">
           <div className="h-full border-solid border-2 border-[#000000]-600 rounded-[15px] bg-[#FFFCF9]">
             <div className="ml-[32px] mt-[31px] flex flex-col">
-              <h1 className='text-black mt-[31px] lg:text-[48px] sm:text-[28px] '>Últimos deslocamentos</h1>
-              <span className='text-[#000000]/60 mt-[12px]'>Acompanhe em tempo real tudo o que está acontecendo</span>
+              <h1 className="text-black mt-[31px] lg:text-[48px] sm:text-[28px] ">
+                Últimos deslocamentos
+              </h1>
+              <span className="text-[#000000]/60 mt-[12px]">
+                Acompanhe em tempo real tudo o que está acontecendo
+              </span>
             </div>
 
-            <div className='px-[60px] mt-[63px] pb-[180px] overflow-x-auto overflow-y-auto h-full'>
-
-              <div className='mb-[49px] flex align-center w-full'>
-                <div className='flex flex-col w-8/12'>
-                  <div className='flex'>
-                    <CustomDatePickerRange onChangeDate={setDateRange} startDate={startDate} endDate={endDate}/>
-                    <DropdownInput placeholder='Origem' data={origins} value={originFilter} onChangeValue={setOriginFilter} />
-                    <DropdownInput placeholder='Destino' data={destinations} value={destinationFilter} onChangeValue={setDestinationFilter} />
+            <div className="px-[60px] mt-[63px] pb-[180px] overflow-x-auto overflow-y-auto h-full">
+              <div className="mb-[49px] flex align-center w-full">
+                <div className="flex flex-col w-8/12">
+                  <div className="flex">
+                    <CustomDatePickerRange
+                      onChangeDate={setDateRange}
+                      startDate={startDate}
+                      endDate={endDate}
+                    />
+                    <DropdownInput
+                      placeholder="Origem"
+                      data={origins}
+                      value={originFilter}
+                      onChangeValue={setOriginFilter}
+                    />
+                    <DropdownInput
+                      placeholder="Destino"
+                      data={destinations}
+                      value={destinationFilter}
+                      onChangeValue={setDestinationFilter}
+                    />
                   </div>
-                  <div className='mt-[15px] flex'>
-                    <CustomInput placeholder='Solicitante' value={requesterFilter} onChangeText={setRequesterFilter} />
-                    <CustomInput placeholder='Voluntário' value={voluntaryFilter} onChangeText={setVoluntaryFilter}/>
-                    <DropdownInput placeholder='Status' data={status} value={statusFilter} onChangeValue={setStatusFilter} />
+                  <div className="mt-[15px] flex">
+                    <CustomInput
+                      placeholder="Solicitante"
+                      value={requesterFilter}
+                      onChangeText={setRequesterFilter}
+                      onSearch={onSearch}
+                      inputType="requester"
+                    />
+                    <CustomInput
+                      placeholder="Voluntário"
+                      value={voluntaryFilter}
+                      onChangeText={setVoluntaryFilter}
+                      onSearch={onSearch}
+                      inputType="voluntary"
+                    />
+                    <DropdownInput
+                      placeholder="Status"
+                      data={status}
+                      value={statusFilter}
+                      onChangeValue={setStatusFilter}
+                    />
                   </div>
                 </div>
 
-                <div className='ml-[37px] flex justify-center w-5/12 w-full align-center py-[37px]'>
-                  <FilterButton onClickValue={filterData}/>
+                <div className="ml-[37px] flex justify-center w-5/12 w-full align-center py-[37px]">
+                  <FilterButton onClickValue={filterData} />
                 </div>
               </div>
-              <table className='table-auto min-w-full text-center border-collapse border border-[#B9B9B9] overflow-hidden bg-[#fff]'>
-                <thead className='bg-[#000000]/5 text-black'>
+              <table className="table-auto min-w-full text-center border-collapse border border-[#B9B9B9] overflow-hidden bg-[#fff]">
+                <thead className="bg-[#000000]/5 text-black">
                   <tr>
-                    <th className="border border-[#B9B9B9] px-4 py-2">Horário</th>
-                    <th className="border border-[#B9B9B9] px-4 py-2">Origem</th>
-                    <th className="border border-[#B9B9B9] px-4 py-2">Destino</th>
-                    <th className="border border-[#B9B9B9] px-4 py-2">Solicitante</th>
-                    <th className="border border-[#B9B9B9] px-4 py-2">Voluntário</th>
-                    <th className="border border-[#B9B9B9] px-4 py-2">Status</th>
+                    <th className="border border-[#B9B9B9] px-4 py-2">
+                      Horário
+                    </th>
+                    <th className="border border-[#B9B9B9] px-4 py-2">
+                      Origem
+                    </th>
+                    <th className="border border-[#B9B9B9] px-4 py-2">
+                      Destino
+                    </th>
+                    <th className="border border-[#B9B9B9] px-4 py-2">
+                      Solicitante
+                    </th>
+                    <th className="border border-[#B9B9B9] px-4 py-2">
+                      Voluntário
+                    </th>
+                    <th className="border border-[#B9B9B9] px-4 py-2">
+                      Status
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
-                {displacements.length !== 0 && (displacements.map(displacement => (
-
-                    <tr key={displacement.id} className="border border-black">
-                      <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">{displacement.time}</td>
-                      <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">{displacement.origin}</td>
-                      <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">{displacement.destination}</td>
-                      <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">{displacement.requester.name}</td>
-                      <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">{displacement.voluntary ? displacement.voluntary.name : "Procurando..."}</td>
-                      <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">{getLocomotionStatusValueByKey(displacement.status)}</td>
-                    </tr>
-                )))}                
+                  {displacements.length !== 0 &&
+                    displacements.map((displacement) => (
+                      <tr key={displacement.id} className="border border-black">
+                        <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">
+                          {displacement.time}
+                        </td>
+                        <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">
+                          {displacement.origin}
+                        </td>
+                        <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">
+                          {displacement.destination}
+                        </td>
+                        <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">
+                          {displacement.requester.name}
+                        </td>
+                        <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">
+                          {displacement.voluntary
+                            ? displacement.voluntary.name
+                            : "Procurando..."}
+                        </td>
+                        <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">
+                          {getLocomotionStatusValueByKey(displacement.status)}
+                        </td>
+                      </tr>
+                    ))}
                 </tbody>
               </table>
-              {displacements.length === 0 && 
-                <div className="bg-[#fff] border border-[#B9B9B9] text-black flex justify-center items-center py-4">Não possui nenhum deslocamento ainda!</div>
-              }
+              {displacements.length === 0 && (
+                <div className="bg-[#fff] border border-[#B9B9B9] text-black flex justify-center items-center py-4">
+                  Não possui nenhum deslocamento ainda!
+                </div>
+              )}
             </div>
           </div>
         </div>
       </div>
     </>
-  )
+  );
 }

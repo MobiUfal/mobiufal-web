@@ -5,6 +5,8 @@ interface CustomInputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   aditionalStyleClasses?: string;
   onChangeText?: (text: string) => void;
+  inputType?: string;
+  onSearch?: (text: string, type: string) => void;
 }
 
 export const CustomInput = ({
@@ -12,6 +14,8 @@ export const CustomInput = ({
   label,
   aditionalStyleClasses,
   onChangeText,
+  onSearch,
+  inputType,
   ...rest
 }: CustomInputProps) => {
   let bgColor = "bg-[#FFFCF9]";
@@ -40,6 +44,10 @@ export const CustomInput = ({
         placeholder={placeholder}
         onChange={(e) => {
           onChangeText && onChangeText(e.target.value);
+          if (onSearch && inputType) {
+            console.log(inputType);
+            onSearch(e.target.value, inputType);
+          }
         }}
         {...rest}
       />

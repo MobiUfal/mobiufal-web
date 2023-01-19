@@ -1,3 +1,4 @@
+import { format } from 'date-fns';
 import { useCallback, useEffect, useState } from 'react';
 import { CustomDatePickerRange } from '../../components/FormComponents/CustomDatePickerRange';
 import { CustomInput } from '../../components/FormComponents/CustomInput';
@@ -11,6 +12,8 @@ import { getLocomotionStatusKeyByValue, getLocomotionStatusValueByKey } from "..
 interface DisplacementsData {
   id: number;
   time: string;
+  accepted_at: string;
+  finished_at: string;
   origin: string;
   origin_details: string;
   destination: string;
@@ -63,6 +66,8 @@ export function Homepage() {
         return {
           ...displacement,
           time: formatDate(displacement.time),
+          accepted_at: formatDate(displacement.accepted_at).split(' ').splice(1).toString(),
+          finished_at: formatDate(displacement.finished_at).split(' ').splice(1).toString(),
         };
       })
     );
@@ -152,6 +157,8 @@ export function Homepage() {
                     <th className="border border-[#B9B9B9] px-4 py-2">Solicitante</th>
                     <th className="border border-[#B9B9B9] px-4 py-2">Voluntário</th>
                     <th className="border border-[#B9B9B9] px-4 py-2">Status</th>
+                    <th className="border border-[#B9B9B9] px-4 py-2">Aceito</th>
+                    <th className="border border-[#B9B9B9] px-4 py-2">Finalizado</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -164,6 +171,8 @@ export function Homepage() {
                       <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">{displacement.requester.name}</td>
                       <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">{displacement.voluntary ? displacement.voluntary.name : "Procurando..."}</td>
                       <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">{getLocomotionStatusValueByKey(displacement.status)}</td>
+                      <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">{displacement.accepted_at}</td>
+                      <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">{displacement.finished_at}</td>
                     </tr>
                 )))}                
                 </tbody>

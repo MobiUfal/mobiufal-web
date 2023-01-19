@@ -125,8 +125,8 @@ export function Homepage() {
 
             <div className='px-[60px] mt-[63px] pb-[180px] overflow-x-auto overflow-y-auto h-full'>
 
-              <div className='mb-[49px] flex align-center w-full'>
-                <div className='flex flex-col w-8/12'>
+              <div className='mb-[49px] flex items-center flex-col justify-center xl:flex-row gap-10'>
+                <div className='flex flex-col w-full'>
                   <div className='flex'>
                     <CustomDatePickerRange onChangeDate={setDateRange} startDate={startDate} endDate={endDate}/>
                     <DropdownInput placeholder='Origem' data={origins} value={originFilter} onChangeValue={setOriginFilter} />
@@ -139,7 +139,7 @@ export function Homepage() {
                   </div>
                 </div>
 
-                <div className='ml-[37px] flex justify-center w-5/12 w-full align-center py-[37px]'>
+                <div className='xl:w-[50%] w-[80%]'>
                   <FilterButton onClickValue={filterData}/>
                 </div>
               </div>

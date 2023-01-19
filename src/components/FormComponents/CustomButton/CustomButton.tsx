@@ -27,7 +27,7 @@ export function CustomButton({
   return (
     <button
       className={
-        `w-80 rounded-[100px] text-center py-2 transition-all hover:brightness-90 ` +
+        `w-full rounded-[100px] text-center py-2 transition-all hover:brightness-90 ` +
         aditionalStyleClasses +
         `${isLoading === true ? " brightness-90" : ""}`
       }

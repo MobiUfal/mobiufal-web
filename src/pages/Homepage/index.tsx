@@ -172,7 +172,7 @@ export function Homepage() {
                 <Column field="origin" header="Origem" sortable></Column>
                 <Column field="destination" header="Destino" sortable></Column>
                 <Column field="requester.name" header="Solicitante" sortable></Column>
-                <Column field={checkVoluntary} header="Voluntário" sortable></Column>
+                <Column field="voluntary.name" header="Voluntário" body={checkVoluntary} sortable></Column>
                 <Column field="status" header="Status" sortable></Column>
                 <Column field="accepted_at" header="Aceito" sortable></Column>
                 <Column field="finished_at" header="Finalizado" sortable></Column>

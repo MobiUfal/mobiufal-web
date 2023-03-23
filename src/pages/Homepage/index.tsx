@@ -139,7 +139,7 @@ export function Homepage() {
                   </div>
                   <div className='mt-[15px] flex'>
                     <CustomInput placeholder='Solicitante' value={requesterFilter} onChangeText={setRequesterFilter} />
-                    <CustomInput placeholder='Voluntário' value={voluntaryFilter} onChangeText={setVoluntaryFilter}/>
+                    <CustomInput placeholder='Voluntário/a' value={voluntaryFilter} onChangeText={setVoluntaryFilter}/>
                     <DropdownInput placeholder='Status' data={status} value={statusFilter} onChangeValue={setStatusFilter} />
                   </div>
                 </div>
@@ -155,7 +155,7 @@ export function Homepage() {
                     <th className="border border-[#B9B9B9] px-4 py-2">Origem</th>
                     <th className="border border-[#B9B9B9] px-4 py-2">Destino</th>
                     <th className="border border-[#B9B9B9] px-4 py-2">Solicitante</th>
-                    <th className="border border-[#B9B9B9] px-4 py-2">Voluntário</th>
+                    <th className="border border-[#B9B9B9] px-4 py-2">Voluntário/a</th>
                     <th className="border border-[#B9B9B9] px-4 py-2">Status</th>
                     <th className="border border-[#B9B9B9] px-4 py-2">Aceito</th>
                     <th className="border border-[#B9B9B9] px-4 py-2">Finalizado</th>

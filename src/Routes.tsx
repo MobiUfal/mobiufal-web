@@ -27,7 +27,14 @@ export function Routes() {
           </PublicRoute>
         }
       />
-
+      <Route
+        path={"*"}
+        element={
+          <PublicRoute JWT={JWT}>
+            <Home />
+          </PublicRoute>
+        }
+      />
       <Route
         path={"/deslocamentos"}
         element={
@@ -36,7 +43,6 @@ export function Routes() {
           </PrivateRoute>
         }
       />
-
       <Route
         path={"/usuarios"}
         element={
@@ -45,21 +51,11 @@ export function Routes() {
           </PrivateRoute>
         }
       />
-
       <Route
         path={"/usuarios/:id"}
         element={
           <PrivateRoute JWT={JWT}>
             <User />
-          </PrivateRoute>
-        }
-      />
-
-      <Route
-        path={"/configuracoes"}
-        element={
-          <PrivateRoute JWT={JWT}>
-            <Configurations />
           </PrivateRoute>
         }
       />

@@ -12,7 +12,7 @@ export function Sidebar({ isSidebarOpened }: SidebarProps) {
     <aside
       className={`fixed  overflow-hidden top-16  z-[1] pt-[13px] translate-y-[-12px] h-full flex flex-col bg-[#373737] rounded-br-xl ease-in-out duration-300 ${
         isSidebarOpened ? "w-[260px]" : "w-0"
-      }`}  
+      }`}
     >
       <nav className="flex flex-col gap-y-3.5">
         <SectionPage
@@ -25,12 +25,6 @@ export function Sidebar({ isSidebarOpened }: SidebarProps) {
           sectionName="Gerenciar Usuários"
           Icon={FaUserCircle}
           sectionLink="/usuarios"
-        />
-
-        <SectionPage
-          sectionName="Configurações"
-          Icon={IoSettingsSharp}
-          sectionLink="/configuracoes"
         />
       </nav>
     </aside>

@@ -10,6 +10,8 @@ import { FilterButton } from "../../components/FormComponents/FilterButton";
 import { BsFillEyeFill } from "react-icons/bs";
 import { getUserStatusKeyByValue, getUserStatusValueByKey, UserStatus } from "../../utils/UserStatus";
 import { getUserRolesKeyByValue, getUserRolesValueByKey, UserRoles } from "../../utils/UserRoles";
+import { DataTable } from "primereact/datatable";
+import { Column } from "primereact/column";
 
 type UserTransiction = {
   id: number;
@@ -38,7 +40,6 @@ export function PendingUserPage() {
     const response = await api.get(url);
 
     const rawUsers: UserTransiction[] = response.data.data;
-    console.log(rawUsers);
     const roleAux = new Set<String>();
     const statusAux = new Set<String>();
     statusAux.add("Todos");
@@ -92,6 +93,18 @@ export function PendingUserPage() {
     loadUserFiltered(statusFilter, nameFilter, typeFilter);
   }, [statusFilter, nameFilter, typeFilter]);
 
+  const getRole = (user: User) => {
+    return UserRoles[user.role as keyof typeof UserRoles];
+  };
+  
+  const getStatus = (user: User) => {
+    return UserStatus[user.approved as keyof typeof UserStatus];
+  };
+
+  const view = (user: User) => {
+    return  <a href={`usuarios/${user.id}`}className="flex justify-center"> <BsFillEyeFill size={24} color={"#29AAD7"} /></a>
+  };
+
   return (
     <>
       <div className="h-full w-full">
@@ -133,49 +146,22 @@ export function PendingUserPage() {
                   </div>
                 </div>
               </div>
-
-              <table className="table-auto min-w-full text-center border-collapse border border-[#B9B9B9] overflow-hidden bg-[#fff]">
-                <thead className="bg-[#000000]/5 text-black">
-                  <tr>
-                    <th className="border border-[#B9B9B9] px-4 py-2">Nome</th>
-                    <th className="border border-[#B9B9B9] px-4 py-2">Tipo</th>
-                    <th className="border border-[#B9B9B9] px-4 py-2">
-                      Status
-                    </th>
-                    <th className="border border-[#B9B9B9] px-4 py-2">
-                      Visualizar
-                    </th>
-                  </tr>
-                </thead>
-
-                <tbody>
-                  {users.length !== 0 &&
-                    users.map((user) => (
-                      <tr key={user.id}>
-                        <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">
-                          {user.name}
-                        </td>
-                        <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">
-                          {UserRoles[user.role as keyof typeof UserRoles]}
-                        </td>
-                        <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">
-                          {UserStatus[user.approved as keyof typeof UserStatus]}
-                        </td>
-                        <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">
-                          <a
-                            href={`usuarios/${user.id}`}
-                            className="flex justify-center"
-                          >
-                            <BsFillEyeFill size={24} color={"#29AAD7"} />
-                          </a>
-                        </td>
-                      </tr>
-                    ))}
-                </tbody>
-              </table>
-              {users.length === 0 && 
-                <div className="bg-[#fff] border border-[#B9B9B9] text-black flex justify-center items-center py-4">Não possui nenhum usuário ainda!</div>
-              }
+              <DataTable 
+               value={users} 
+               removableSort 
+               showGridlines 
+               paginator 
+               rows={10} 
+               rowsPerPageOptions={[5, 10, 25, 50]} 
+               tableStyle={{ minWidth: '60rem' }}  
+               emptyMessage="Não possui nenhum usuário ainda!"
+               >
+                <Column field="id" header="Id" sortable></Column>
+                <Column field="name" header="Nome" sortable></Column>
+                <Column field="role" header="Tipo" body={getRole} sortable></Column>
+                <Column field="approved" header="Status" body={getStatus} sortable></Column>
+                <Column header="Visualizar" body={view}></Column>
+              </DataTable>
             </div>
           </div>
         </div>

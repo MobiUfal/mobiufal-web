@@ -148,7 +148,7 @@ export function Homepage() {
                   </div>
                   <div className='mt-[15px] flex'>
                     <CustomInput placeholder='Solicitante' value={requesterFilter} onChangeText={setRequesterFilter} />
-                    <CustomInput placeholder='Voluntário' value={voluntaryFilter} onChangeText={setVoluntaryFilter}/>
+                    <CustomInput placeholder='Voluntário/a' value={voluntaryFilter} onChangeText={setVoluntaryFilter}/>
                     <DropdownInput placeholder='Status' data={status} value={statusFilter} onChangeValue={setStatusFilter} />
                   </div>
                 </div>

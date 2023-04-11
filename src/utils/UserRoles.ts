@@ -1,5 +1,5 @@
 export const UserRoles = {
-  VOLUNTARY: "Voluntário",
+  VOLUNTARY: "Voluntário/a",
   REQUESTER: "Solicitante",
   ADMIN: "Administrador",
 };

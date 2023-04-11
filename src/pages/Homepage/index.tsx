@@ -1,4 +1,5 @@
-import { format } from 'date-fns';
+import { DataTable } from 'primereact/datatable';
+import { Column } from 'primereact/column';
 import { useCallback, useEffect, useState } from 'react';
 import { CustomDatePickerRange } from '../../components/FormComponents/CustomDatePickerRange';
 import { CustomInput } from '../../components/FormComponents/CustomInput';
@@ -8,6 +9,7 @@ import { FilterButton } from "../../components/FormComponents/FilterButton";
 import { api } from "../../services/api";
 import { formatDate } from "../../utils/formatDate";
 import { getLocomotionStatusKeyByValue, getLocomotionStatusValueByKey } from "../../utils/LocomotionStatus";
+
 
 interface DisplacementsData {
   id: number;
@@ -52,25 +54,28 @@ export function Homepage() {
     const response = await api.get<ResponseDto>(url);
 
     const { data } = response.data;
+    const requestedDisplacements = data;
+
     const originsAux = new Set<String>();
     const destinationsAux = new Set<String>();
     const statusAux = new Set<String>();
     originsAux.add("Todos");
     destinationsAux.add("Todos");
     statusAux.add("Todos");
-    setDisplacements(
-      data.map((displacement) => {
-        originsAux.add(displacement.origin);
-        destinationsAux.add(displacement.destination);
-        statusAux.add(getLocomotionStatusValueByKey(displacement.status));
-        return {
-          ...displacement,
-          time: formatDate(displacement.time),
-          accepted_at: formatDate(displacement.accepted_at).split(' ').splice(1).toString(),
-          finished_at: formatDate(displacement.finished_at).split(' ').splice(1).toString(),
-        };
-      })
-    );
+    const displacements = requestedDisplacements.map((displacement) => {
+      const status = getLocomotionStatusValueByKey(displacement.status)
+      originsAux.add(displacement.origin);
+      destinationsAux.add(displacement.destination);
+      statusAux.add(status);
+      return {
+        ...displacement,
+        time: formatDate(displacement.time),
+        accepted_at: formatDate(displacement.accepted_at).split(' ').splice(1).toString(),
+        finished_at: formatDate(displacement.finished_at).split(' ').splice(1).toString(),
+        status: status
+      };
+    });
+    setDisplacements(displacements);
     if (url === "/locomotion/") {
       setOrigins(Array.from(originsAux));
       setDestinations(Array.from(destinationsAux));
@@ -118,6 +123,10 @@ export function Homepage() {
     loadDisplacementsFiltered(originFilter, destinationFilter, statusFilter, requesterFilter, voluntaryFilter, startDate, endDate);
   }, [originFilter, destinationFilter, statusFilter, requesterFilter, voluntaryFilter, startDate, endDate])
   
+  const checkVoluntary = (displacement: any) => {
+    return displacement.voluntary ? displacement.voluntary.name : "Procurando...";
+  };
+
   return (
     <>    
       <div className="h-full w-full">
@@ -148,38 +157,26 @@ export function Homepage() {
                   <FilterButton onClickValue={filterData}/>
                 </div>
               </div>
-              <table className='table-auto min-w-full text-center border-collapse border border-[#B9B9B9] overflow-hidden bg-[#fff]'>
-                <thead className='bg-[#000000]/5 text-black'>
-                  <tr>
-                    <th className="border border-[#B9B9B9] px-4 py-2">Horário</th>
-                    <th className="border border-[#B9B9B9] px-4 py-2">Origem</th>
-                    <th className="border border-[#B9B9B9] px-4 py-2">Destino</th>
-                    <th className="border border-[#B9B9B9] px-4 py-2">Solicitante</th>
-                    <th className="border border-[#B9B9B9] px-4 py-2">Voluntário/a</th>
-                    <th className="border border-[#B9B9B9] px-4 py-2">Status</th>
-                    <th className="border border-[#B9B9B9] px-4 py-2">Aceito</th>
-                    <th className="border border-[#B9B9B9] px-4 py-2">Finalizado</th>
-                  </tr>
-                </thead>
-                <tbody>
-                {displacements.length !== 0 && (displacements.map(displacement => (
-
-                    <tr key={displacement.id} className="border border-black">
-                      <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">{displacement.time}</td>
-                      <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">{displacement.origin}</td>
-                      <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">{displacement.destination}</td>
-                      <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">{displacement.requester.name}</td>
-                      <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">{displacement.voluntary ? displacement.voluntary.name : "Procurando..."}</td>
-                      <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">{getLocomotionStatusValueByKey(displacement.status)}</td>
-                      <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">{displacement.accepted_at}</td>
-                      <td className="border border-[#B9B9B9] px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">{displacement.finished_at}</td>
-                    </tr>
-                )))}                
-                </tbody>
-              </table>
-              {displacements.length === 0 && 
-                <div className="bg-[#fff] border border-[#B9B9B9] text-black flex justify-center items-center py-4">Não possui nenhum deslocamento ainda!</div>
-              }
+              <DataTable 
+               value={displacements} 
+               removableSort 
+               showGridlines 
+               paginator 
+               rows={10} 
+               rowsPerPageOptions={[5, 10, 25, 50]} 
+               tableStyle={{ minWidth: '60rem' }}  
+               emptyMessage="Não possui nenhum deslocamento ainda!"
+               >
+                <Column field="id" header="Id" sortable></Column>
+                <Column field="time" header="Horário" sortable></Column>
+                <Column field="origin" header="Origem" sortable></Column>
+                <Column field="destination" header="Destino" sortable></Column>
+                <Column field="requester.name" header="Solicitante" sortable></Column>
+                <Column field="voluntary.name" header="Voluntário" body={checkVoluntary} sortable></Column>
+                <Column field="status" header="Status" sortable></Column>
+                <Column field="accepted_at" header="Aceito" sortable></Column>
+                <Column field="finished_at" header="Finalizado" sortable></Column>
+              </DataTable>
             </div>
           </div>
         </div>

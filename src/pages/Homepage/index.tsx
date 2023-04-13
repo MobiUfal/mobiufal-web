@@ -9,6 +9,7 @@ import { FilterButton } from "../../components/FormComponents/FilterButton";
 import { api } from "../../services/api";
 import { formatDate } from "../../utils/formatDate";
 import { getLocomotionStatusKeyByValue, getLocomotionStatusValueByKey } from "../../utils/LocomotionStatus";
+import { DisplacementsModal } from '../../components/DisplacementsModal';
 
 
 interface DisplacementsData {
@@ -49,6 +50,9 @@ export function Homepage() {
   const [voluntaryFilter, setVoluntaryFilter] = useState<string>('');
   const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([null, null]);
   const [startDate, endDate] = dateRange;
+
+  const [isOpen, setIsOpen] = useState<Boolean>(false);
+  const [displacementInformation, setDisplacementInformation] = useState<DisplacementsData>();
 
   async function loadDisplacements(url: string) {
     const response = await api.get<ResponseDto>(url);
@@ -102,19 +106,19 @@ export function Homepage() {
         addOrFirst = url.includes("?") ? "&" : "?";
         url += `${addOrFirst}status=${getLocomotionStatusKeyByValue(statusFilter)}`;
       }
-      if(requesterFilter) {
+      if (requesterFilter) {
         addOrFirst = url.includes('?') ? '&' : '?';
         url += `${addOrFirst}requester=${requesterFilter}`
       }
-      if(voluntaryFilter) {
+      if (voluntaryFilter) {
         addOrFirst = url.includes('?') ? '&' : '?';
         url += `${addOrFirst}voluntary=${voluntaryFilter}`
       }
-      if(startDate) {
+      if (startDate) {
         addOrFirst = url.includes('?') ? '&' : '?';
         url += `${addOrFirst}start=${startDate}`
       }
-      if(endDate) {
+      if (endDate) {
         addOrFirst = url.includes('?') ? '&' : '?';
         url += `${addOrFirst}end=${endDate}`
       }
@@ -122,13 +126,23 @@ export function Homepage() {
     }
     loadDisplacementsFiltered(originFilter, destinationFilter, statusFilter, requesterFilter, voluntaryFilter, startDate, endDate);
   }, [originFilter, destinationFilter, statusFilter, requesterFilter, voluntaryFilter, startDate, endDate])
-  
+
   const checkVoluntary = (displacement: any) => {
     return displacement.voluntary ? displacement.voluntary.name : "Procurando...";
   };
 
+  const handleDisplacementClickOpen = (displacement: DisplacementsData) : void => {
+    setIsOpen(true);
+    setDisplacementInformation(displacement);
+  }
+
+  const handleDisplacementClickClose = () : void => {
+    setIsOpen(false);
+    setDisplacementInformation(undefined);
+  }
+
   return (
-    <>    
+    <>
       <div className="h-full w-full">
         <div className="container mx-auto md:container md:mx-auto py-[91px] px-[67px]">
           <div className="h-full border-solid border-2 border-[#000000]-600 rounded-[15px] bg-[#FFFCF9]">
@@ -142,40 +156,44 @@ export function Homepage() {
               <div className='mb-[49px] flex items-center flex-col justify-center xl:flex-row gap-10'>
                 <div className='flex flex-col w-full'>
                   <div className='flex'>
-                    <CustomDatePickerRange onChangeDate={setDateRange} startDate={startDate} endDate={endDate}/>
+                    <CustomDatePickerRange onChangeDate={setDateRange} startDate={startDate} endDate={endDate} />
                     <DropdownInput placeholder='Origem' data={origins} value={originFilter} onChangeValue={setOriginFilter} />
                     <DropdownInput placeholder='Destino' data={destinations} value={destinationFilter} onChangeValue={setDestinationFilter} />
                   </div>
                   <div className='mt-[15px] flex'>
                     <CustomInput placeholder='Solicitante' value={requesterFilter} onChangeText={setRequesterFilter} />
-                    <CustomInput placeholder='Voluntário/a' value={voluntaryFilter} onChangeText={setVoluntaryFilter}/>
+                    <CustomInput placeholder='Voluntário/a' value={voluntaryFilter} onChangeText={setVoluntaryFilter} />
                     <DropdownInput placeholder='Status' data={status} value={statusFilter} onChangeValue={setStatusFilter} />
                   </div>
                 </div>
 
                 <div className='xl:w-[50%] w-[80%]'>
-                  <FilterButton onClickValue={filterData}/>
+                  <FilterButton onClickValue={filterData} />
                 </div>
               </div>
-              <DataTable 
-               value={displacements} 
-               removableSort 
-               showGridlines 
-               paginator 
-               rows={10} 
-               rowsPerPageOptions={[5, 10, 25, 50]} 
-               tableStyle={{ minWidth: '60rem' }}  
-               emptyMessage="Não possui nenhum deslocamento ainda!"
-               >
-                <Column field="id" header="Id" sortable></Column>
-                <Column field="time" header="Horário" sortable></Column>
+              {isOpen && <DisplacementsModal info={displacementInformation} handleDisplacementClickClose={handleDisplacementClickClose} />}
+              <DataTable
+                value={displacements}
+                removableSort
+                showGridlines
+                paginator
+                rows={10}
+                rowsPerPageOptions={[5, 10, 25, 50]}
+                tableStyle={{ minWidth: '60rem' }}
+                emptyMessage="Não possui nenhum deslocamento ainda!"
+                selectionMode="single"
+                selection={displacementInformation}
+                onSelectionChange={(e) => handleDisplacementClickOpen(e.value)}
+              >
+                {/* <Column field="id" header="Id" sortable></Column>
+                <Column field="time" header="Horário" sortable></Column> */}
                 <Column field="origin" header="Origem" sortable></Column>
                 <Column field="destination" header="Destino" sortable></Column>
                 <Column field="requester.name" header="Solicitante" sortable></Column>
-                <Column field="voluntary.name" header="Voluntário" body={checkVoluntary} sortable></Column>
+                {/* <Column field="voluntary.name" header="Voluntário" body={checkVoluntary} sortable></Column>
                 <Column field="status" header="Status" sortable></Column>
                 <Column field="accepted_at" header="Aceito" sortable></Column>
-                <Column field="finished_at" header="Finalizado" sortable></Column>
+                <Column field="finished_at" header="Finalizado" sortable></Column> */}
               </DataTable>
             </div>
           </div>

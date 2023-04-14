@@ -21,7 +21,7 @@ interface DisplacementsData {
 }
 
 type Props = {
-    info: DisplacementsData,
+    info: DisplacementsData | any;
     handleDisplacementClickClose: () => void
 }
 

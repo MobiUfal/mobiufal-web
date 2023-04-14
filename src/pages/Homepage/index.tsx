@@ -1,4 +1,4 @@
-import { DataTable } from 'primereact/datatable';
+import { DataTable, DataTableSelection, DataTableProps } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { useCallback, useEffect, useState } from 'react';
 import { CustomDatePickerRange } from '../../components/FormComponents/CustomDatePickerRange';
@@ -52,7 +52,7 @@ export function Homepage() {
   const [startDate, endDate] = dateRange;
 
   const [isOpen, setIsOpen] = useState<Boolean>(false);
-  const [displacementInformation, setDisplacementInformation] = useState<DisplacementsData>();
+  const [displacementInformation, setDisplacementInformation] = useState<DataTableSelection<DisplacementsData[]>>();
 
   async function loadDisplacements(url: string) {
     const response = await api.get<ResponseDto>(url);
@@ -131,12 +131,12 @@ export function Homepage() {
     return displacement.voluntary ? displacement.voluntary.name : "Procurando...";
   };
 
-  const handleDisplacementClickOpen = (displacement: DisplacementsData) : void => {
+  const handleDisplacementClickOpen = (displacement :  DisplacementsData | any): void => {
     setIsOpen(true);
     setDisplacementInformation(displacement);
   }
 
-  const handleDisplacementClickClose = () : void => {
+  const handleDisplacementClickClose = (): void => {
     setIsOpen(false);
     setDisplacementInformation(undefined);
   }

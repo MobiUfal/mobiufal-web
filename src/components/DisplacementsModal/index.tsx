@@ -61,7 +61,7 @@ function DisplacementsModal({ info, handleDisplacementClickClose }: Props): JSX.
                                             className="text-lg leading-6 font-medium text-white rounded text-center border bg-[#29AAD7] w-[100%] py-5 mb-10"
                                             id="modal-headline"
                                         >
-                                            Informações de deslocamento
+                                            Informações sobre deslocamento
                                         </h3>
                                         {/* Content div */}
                                         <div className="mt-2 text-black w-[590px]">

@@ -1,7 +1,7 @@
 export const UserRoles = {
   VOLUNTARY: "Voluntário/a",
   REQUESTER: "Solicitante",
-  ADMIN: "Administrador",
+  ADMIN: "Administrador/a",
 };
 
 export const getUserRolesKeyByValue = (value: string) => {

@@ -22,7 +22,7 @@ export function Sidebar({ isSidebarOpened }: SidebarProps) {
         />
 
         <SectionPage
-          sectionName="Gerenciar Usuários"
+          sectionName="Gerenciar Usuários/as"
           Icon={FaUserCircle}
           sectionLink="/usuarios"
         />

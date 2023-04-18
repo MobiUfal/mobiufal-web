@@ -112,7 +112,7 @@ export function PendingUserPage() {
           <div className="h-full border-solid border-2 border-[#000000]-600 rounded-[15px] bg-[#FFFCF9]">
             <div className="ml-[32px] mt-[31px]flex flex-col">
               <h1 className="text-black mt-[31px] lg:text-[48px] sm:text-[28px] ">
-                Gerenciar Usuários
+                Gerenciar Usuários/as
               </h1>
             </div>
 

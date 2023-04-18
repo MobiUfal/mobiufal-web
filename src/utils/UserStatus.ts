@@ -1,8 +1,8 @@
 export const UserStatus = {
   // update aproved word in backend (change aproved to approved in backend api route return)
-  APROVED: "Aprovado",
+  APROVED: "Aprovado/a",
   PENDING: "Aguardando Aprovação",
-  BLOCKED: "Bloqueado",
+  BLOCKED: "Bloqueado/a",
 };
 
 export const getUserStatusKeyByValue = (value: string) => {
